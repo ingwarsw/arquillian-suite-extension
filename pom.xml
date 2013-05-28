@@ -25,6 +25,9 @@
     </licenses>
 
     <properties>
+        <project.build.outputEncoding>UTF-8</project.build.outputEncoding>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <version.arquillian_core>1.0.3.Final</version.arquillian_core>
         <version.org.jboss.jbossas>7.1.1.Final</version.org.jboss.jbossas>
         <version.junit>4.10</version.junit>
@@ -70,6 +73,20 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.1.2</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <artifactId>maven-release-plugin</artifactId>
                 <configuration>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
@@ -80,5 +97,21 @@
         </plugins>
     </build>
 
+    <scm>
+        <developerConnection>scm:git:https://github.com/it-crowd/itcrowd-utils.git</developerConnection>
+    </scm>
+
+    <distributionManagement>
+        <repository>
+            <id>itcrowd.pl</id>
+            <name>IT Crowd company internal repository</name>
+            <url>http://artifactory.itcrowd.pl/libs-release-local</url>
+        </repository>
+        <snapshotRepository>
+            <id>itcrowd.pl</id>
+            <name>IT Crowd company internal repository</name>
+            <url>http://artifactory.itcrowd.pl/libs-snapshot-local</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 </project>
