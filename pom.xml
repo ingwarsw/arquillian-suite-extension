@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <!-- Parent -->
@@ -8,12 +7,12 @@
         <groupId>org.jboss</groupId>
         <artifactId>jboss-parent</artifactId>
         <version>10</version>
-        <relativePath/>
+        <relativePath />
     </parent>
 
     <groupId>org.jboss.arquillian.extension</groupId>
     <artifactId>arquillian-suite-extension</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0.ITC</version>
     <packaging>jar</packaging>
     <name>Arquillian suite extension</name>
 
@@ -98,7 +97,8 @@
     </build>
 
     <scm>
-        <developerConnection>scm:git:https://github.com/it-crowd/itcrowd-utils.git</developerConnection>
+        <developerConnection>scm:git:https://github.com/it-crowd/arquillian-suite-extension.git</developerConnection>
+        <tag>arquillian-suite-extension-1.0.0.ITC</tag>
     </scm>
 
     <distributionManagement>
