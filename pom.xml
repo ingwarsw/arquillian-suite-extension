@@ -12,7 +12,7 @@
 
     <groupId>org.jboss.arquillian.extension</groupId>
     <artifactId>arquillian-suite-extension</artifactId>
-    <version>1.0.0.ITC</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Arquillian suite extension</name>
 
@@ -91,6 +91,7 @@
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                     <pushChanges>false</pushChanges>
                     <localCheckout>true</localCheckout>
+                    <tagNameFormat>@{project.artifactId}-@{project.version}.ITC</tagNameFormat>
                 </configuration>
             </plugin>
         </plugins>
@@ -98,7 +99,7 @@
 
     <scm>
         <developerConnection>scm:git:https://github.com/it-crowd/arquillian-suite-extension.git</developerConnection>
-        <tag>arquillian-suite-extension-1.0.0.ITC</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <distributionManagement>
