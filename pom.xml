@@ -6,13 +6,13 @@
     <parent>
         <groupId>org.jboss</groupId>
         <artifactId>jboss-parent</artifactId>
-        <version>10</version>
+        <version>11</version>
         <relativePath />
     </parent>
 
     <groupId>org.jboss.arquillian.extension</groupId>
     <artifactId>arquillian-suite-extension</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.2-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Arquillian suite extension</name>
 
@@ -27,8 +27,8 @@
         <project.build.outputEncoding>UTF-8</project.build.outputEncoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <version.arquillian_core>1.0.3.Final</version.arquillian_core>
-        <version.org.jboss.jbossas>7.1.1.Final</version.org.jboss.jbossas>
+        <version.arquillian_core>1.0.4.Final</version.arquillian_core>
+        <version.org.jboss.jbossas>7.2.0.Final</version.org.jboss.jbossas>
         <version.junit>4.10</version.junit>
     </properties>
 
@@ -48,7 +48,7 @@
 
         <dependency>
             <groupId>org.jboss.arquillian.core</groupId>
-            <artifactId>arquillian-core-spi</artifactId>
+            <artifactId>arquillian-core-api</artifactId>
         </dependency>
 
         <dependency>
@@ -66,53 +66,57 @@
             <artifactId>arquillian-container-test-impl-base</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.jboss.arquillian.protocol</groupId>
+            <artifactId>arquillian-protocol-servlet</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.as</groupId>
+            <artifactId>jboss-as-arquillian-container-remote</artifactId>
+            <version>${version.org.jboss.jbossas}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.arquillian.junit</groupId>
+            <artifactId>arquillian-junit-container</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.9.8</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>6.0</version>
+            <scope>test</scope>
+        </dependency>
+        
     </dependencies>
-
-
+    
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>2.1.2</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jar-no-fork</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <artifactId>maven-release-plugin</artifactId>
                 <configuration>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                     <pushChanges>false</pushChanges>
                     <localCheckout>true</localCheckout>
-                    <tagNameFormat>@{project.artifactId}-@{project.version}.ITC</tagNameFormat>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-
-    <scm>
-        <developerConnection>scm:git:https://github.com/it-crowd/arquillian-suite-extension.git</developerConnection>
-        <tag>HEAD</tag>
-    </scm>
-
-    <distributionManagement>
-        <repository>
-            <id>itcrowd.pl</id>
-            <name>IT Crowd company internal repository</name>
-            <url>http://artifactory.itcrowd.pl/libs-release-local</url>
-        </repository>
-        <snapshotRepository>
-            <id>itcrowd.pl</id>
-            <name>IT Crowd company internal repository</name>
-            <url>http://artifactory.itcrowd.pl/libs-snapshot-local</url>
-        </snapshotRepository>
-    </distributionManagement>
-
 </project>

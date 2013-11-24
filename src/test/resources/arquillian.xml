@@ -1,0 +1,30 @@
+<arquillian xmlns="http://jboss.org/schema/arquillian"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://jboss.org/schema/arquillian http://jboss.org/schema/arquillian/arquillian_1_0.xsd">
+
+    <engine>
+        <!-- Restaarts managd instance every 20 tests -->
+        <property name="maxTestClassesBeforeRestart">20</property>
+        <property name="deploymentExportPath">target/</property>
+    </engine>
+
+    <defaultProtocol type="Servlet 3.0"/>
+
+    <container qualifier="jbossas-remote" default="true">
+        <configuration>
+            <property name="username">prs</property>
+            <property name="password">prs-coi-6532</property>
+            <!--<property name="managementAddress">prs.jakby.co</property>-->
+        </configuration>
+    </container>
+
+    <container qualifier="jbossas-managed" default="false">
+        <configuration>
+            <property name="jbossHome">/home/ingwar/java/workspace/srp-full/base/jboss</property>
+        </configuration>
+    </container>
+
+    <extension qualifier="suite">
+        <property name="deploymentClass">test.Deployments</property>
+    </extension>
+</arquillian>
