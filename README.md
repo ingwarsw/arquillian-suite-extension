@@ -1,6 +1,9 @@
 The Arquillian Suite Extension
 ==================================
 
+[![Build Status](https://travis-ci.org/ingwarsw/arquillian-suite-extension.png)](https://travis-ci.org/ingwarsw/arquillian-suite-extension)
+
+
 The Extension will force all Classes in a Module into a TestSuite running from the same DeploymentScenario.
 
 The deploymentClass defined in in the "suite" extension configuration will be used as a 'template' for all other TestClass scenarios.
@@ -24,4 +27,4 @@ Credits
 
 Most work was done by Aslak Knutsen
 - https://gist.github.com/aslakknutsen/3975179
-Part was added by ItCrowd team.
+- Part was added by ItCrowd team.
