@@ -1,1 +1,5 @@
 language: java
+env:
+  matrix:
+    - PROFILE=test-glassfish-embeded
+script: mvn clean install -P${PROFILE}
