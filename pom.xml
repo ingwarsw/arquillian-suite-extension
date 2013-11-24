@@ -27,7 +27,7 @@
         <project.build.outputEncoding>UTF-8</project.build.outputEncoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <version.arquillian_core>1.0.4.Final</version.arquillian_core>
+        <version.arquillian_core>1.1.2.Final</version.arquillian_core>
         <version.org.jboss.jbossas>7.2.0.Final</version.org.jboss.jbossas>
         <version.junit>4.10</version.junit>
     </properties>
