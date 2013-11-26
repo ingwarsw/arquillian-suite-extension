@@ -1,7 +1,7 @@
-package org.jboss.tools.arquillian.extension.suite;
+package org.eu.ingwar.tools.arquillian.extension.suite;
 
-import org.jboss.tools.arquillian.extension.suite.annotations.ExtendedSuiteScoped;
-import org.jboss.tools.arquillian.extension.suite.annotations.ArquilianSuiteDeployment;
+import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ExtendedSuiteScoped;
+import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquilianSuiteDeployment;
 import java.util.Set;
 import org.jboss.arquillian.config.descriptor.api.ArquillianDescriptor;
 import org.jboss.arquillian.container.spi.Container;

@@ -1,6 +1,6 @@
-package org.jboss.tools.arquillian.extension.suite;
+package org.eu.ingwar.tools.arquillian.extension.suite;
 
-import org.jboss.tools.arquillian.extension.suite.annotations.ExtendedSuiteScoped;
+import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ExtendedSuiteScoped;
 import org.jboss.arquillian.core.spi.HashObjectStore;
 import org.jboss.arquillian.core.spi.context.AbstractContext;
 import org.jboss.arquillian.core.spi.context.ObjectStore;

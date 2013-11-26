@@ -1,4 +1,4 @@
-package org.jboss.tools.arquillian.extension.suite;
+package org.eu.ingwar.tools.arquillian.extension.suite;
 
 import org.jboss.arquillian.core.spi.context.NonIdBoundContext;
 

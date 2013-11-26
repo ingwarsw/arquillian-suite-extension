@@ -4,13 +4,12 @@
 
     <!-- Parent -->
     <parent>
-        <groupId>org.jboss</groupId>
-        <artifactId>jboss-parent</artifactId>
-        <version>11</version>
-        <relativePath />
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
     </parent>
 
-    <groupId>org.jboss.arquillian.extension</groupId>
+    <groupId>org.eu.ingwar.tools</groupId>
     <artifactId>arquillian-suite-extension</artifactId>
     <version>1.0.2-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -22,12 +21,19 @@
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
+    
+    <scm>
+        <connection>scm:git:git@github.com:ingwarsw/arquillian-suite-extension.git</connection>
+        <developerConnection>scm:git:git@github.com:ingwarsw/arquillian-suite-extension.git</developerConnection>
+        <url>git@github.com:ingwarsw/arquillian-suite-extension.git</url>
+    </scm>
 
     <properties>
         <project.build.outputEncoding>UTF-8</project.build.outputEncoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <version.arquillian_core>1.1.2.Final</version.arquillian_core>
+        <version.jbossas>7.2.0.Final</version.jbossas>
     </properties>
 
     <dependencyManagement>
@@ -43,16 +49,6 @@
     </dependencyManagement>
 
     <dependencies>
-
-        <dependency>
-            <groupId>org.jboss.arquillian.core</groupId>
-            <artifactId>arquillian-core-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jboss.arquillian.container</groupId>
-            <artifactId>arquillian-container-spi</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>org.jboss.arquillian.container</groupId>
@@ -117,7 +113,7 @@
                 <dependency>
                     <groupId>org.jboss.as</groupId>
                     <artifactId>jboss-as-arquillian-container-remote</artifactId>
-                    <version>7.2.0.Final</version>
+                    <version>${version.jbossas}</version>
                     <scope>test</scope>
                 </dependency>
             </dependencies>
@@ -131,7 +127,7 @@
                     <groupId>org.glassfish.main.extras</groupId>
                     <artifactId>glassfish-embedded-all</artifactId>
                     <version>3.1.2.2</version>
-                    <scope>provided</scope>
+                    <scope>test</scope>
                 </dependency>
                 <dependency>
                     <groupId>org.jboss.arquillian.container</groupId>

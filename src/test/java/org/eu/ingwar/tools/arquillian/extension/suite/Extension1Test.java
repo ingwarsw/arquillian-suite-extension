@@ -1,4 +1,4 @@
-package org.jboss.tools.arquillian.extension.suite;
+package org.eu.ingwar.tools.arquillian.extension.suite;
 
 import javax.enterprise.inject.spi.BeanManager;
 
@@ -9,11 +9,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(Arquillian.class)
-public class Extension2TestIT {
+public class Extension1Test {
 
     @Test
     public void shouldInject(BeanManager bm) {
-        System.out.println("IT Test2");
+        System.out.println("Test1");
         Assert.assertNotNull(bm);
     }
 }

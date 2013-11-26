@@ -1,6 +1,6 @@
-package org.jboss.tools.arquillian.extension.suite;
+package org.eu.ingwar.tools.arquillian.extension.suite;
 
-import org.jboss.tools.arquillian.extension.suite.annotations.ArquilianSuiteDeployment;
+import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquilianSuiteDeployment;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
