@@ -11,12 +11,27 @@ The deploymentClass defined in in the "suite" extension configuration will be us
 Usage
 -----
 
-Just add impl module to classpath and run test either from IDE or maven.
+Add module to classpath.
 
     <dependency>
         <groupId>org.jboss.arquillian.extension</groupId>
         <artifactId>arquillian-suite-extension</artifactId>
     </dependency>
+
+Mark one of your test classes with annotation @ArquilianSuiteDeployment.
+
+@ArquilianSuiteDeployment
+public class Deployments {
+
+    @Deployment
+    public static WebArchive deploy() {
+        return ShrinkWrap.create(WebArchive.class)
+                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
+                .addPackage(Deployments.class.getPackage());
+    }
+}
+
+Run test either from IDE or maven.
 
 **Make sure you use servlet protocol!** To do that add following to arquillian.xml:
 
