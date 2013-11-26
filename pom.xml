@@ -133,7 +133,7 @@
             <id>generate-sources-and-javadocs</id>
             <activation>
                 <property>
-                    <name>SONATYPE_USERNAME</name>
+                    <name>env.SONATYPE_USERNAME</name>
                 </property>
             </activation>
             <build>
