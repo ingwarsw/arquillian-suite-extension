@@ -27,6 +27,14 @@
         <developerConnection>scm:git:git@github.com:ingwarsw/arquillian-suite-extension.git</developerConnection>
         <url>git@github.com:ingwarsw/arquillian-suite-extension.git</url>
     </scm>
+    
+    <developers>
+        <developer>
+            <id>ingwarsw</id>
+            <name>Karol Lassak</name>
+            <email>ingwar@ingwar.eu.org</email>
+        </developer>
+    </developers>
 
     <properties>
         <project.build.outputEncoding>UTF-8</project.build.outputEncoding>
