@@ -6,14 +6,13 @@ jdk:
 
 env:
   global:
-    - SONATYPE_USERNAME=yourusername
-    - secure: "your encrypted SONATYPE_PASSWORD=pass"
+    - SONATYPE_USERNAME=ingwar
+    - secure: ""
   matrix:
     - PROFILE=test-glassfish-embeded
     
 script: mvn clean install -P${PROFILE}
 
 after_success:
-  - python travis/addServer.py
-  - mvn clean deploy --settings ~/.m2/mySettings.xml
+  - "[[ $TRAVIS_BRANCH == \"master\" ]] && { python travis/addServer.py; mvn clean deploy -DskipTests --settings ~/.m2/mySettings.xml; };"
 
