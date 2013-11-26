@@ -1,8 +1,19 @@
 language: java
+
 jdk:
   - openjdk7
   - oraclejdk7
+
 env:
+  global:
+    - SONATYPE_USERNAME=yourusername
+    - secure: "your encrypted SONATYPE_PASSWORD=pass"
   matrix:
     - PROFILE=test-glassfish-embeded
+    
 script: mvn clean install -P${PROFILE}
+
+after_success:
+  - python travis/addServer.py
+  - mvn clean deploy --settings ~/.m2/mySettings.xml
+

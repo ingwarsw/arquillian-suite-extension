@@ -34,6 +34,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <version.arquillian_core>1.1.2.Final</version.arquillian_core>
         <version.jbossas>7.2.0.Final</version.jbossas>
+        <version.glassfish>3.1.2.2</version.glassfish>
     </properties>
 
     <dependencyManagement>
@@ -126,7 +127,7 @@
                 <dependency>
                     <groupId>org.glassfish.main.extras</groupId>
                     <artifactId>glassfish-embedded-all</artifactId>
-                    <version>3.1.2.2</version>
+                    <version>${version.glassfish}</version>
                     <scope>test</scope>
                 </dependency>
                 <dependency>
