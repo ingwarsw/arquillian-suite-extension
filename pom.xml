@@ -23,9 +23,10 @@
     </licenses>
     
     <scm>
-        <connection>scm:git:git@github.com:ingwarsw/arquillian-suite-extension.git</connection>
-        <developerConnection>scm:git:git@github.com:ingwarsw/arquillian-suite-extension.git</developerConnection>
-        <url>git@github.com:ingwarsw/arquillian-suite-extension.git</url>
+        <connection>scm:git:https://github.com/ingwarsw/arquillian-suite-extension.git</connection>
+        <developerConnection>scm:git:https://github.com/ingwarsw/arquillian-suite-extension.git</developerConnection>
+        <url>https://github.com:ingwarsw/arquillian-suite-extension</url>
+        <tag>HEAD</tag>
     </scm>
     
     <developers>
