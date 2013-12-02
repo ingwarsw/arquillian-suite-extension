@@ -164,14 +164,15 @@ public class ArquillianSuiteExtension implements LoadableExtension {
          */
         private Class<?> getDeploymentClass() {
             Reflections reflections = new Reflections("");
-            Set<Class<?>> results = reflections.getTypesAnnotatedWith(ArquilianSuiteDeployment.class, false);
+            Set<Class<?>> results = reflections.getTypesAnnotatedWith(ArquilianSuiteDeployment.class, true);
 
             if (results.isEmpty()) {
+                System.err.println("ERROR: arquillian-suite-deployment: Cannot find class annotated with @ArquilianSuiteDeployment");
                 throw new IllegalArgumentException("Cannot find class annotated with @ArquilianSuiteDeployment");
             }
             if (results.size() > 1) {
                 for (Class<?> type : results) {
-                    System.err.println("Duplicated class: " + type.getName()); // NOPMD
+                    System.err.println("ERROR: arquillian-suite-deployment: Duplicated class annotated with @ArquilianSuiteDeployment: " + type.getName());
                 }
                 throw new IllegalArgumentException("Duplicated classess annotated with @ArquilianSuiteDeployment");
             }
