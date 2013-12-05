@@ -12,7 +12,7 @@ env:
     - PROFILE=test-glassfish-embeded
     - PROFILE=test-jboss-managed
     
-script: mvn clean install -P${PROFILE}
+script: mvn install -P${PROFILE}
 
 after_success:
   - "[[ $TRAVIS_BRANCH == \"master\" ]] && { python travis/addServer.py; mvn clean deploy -DskipTests --settings ~/.m2/mySettings.xml; };"
