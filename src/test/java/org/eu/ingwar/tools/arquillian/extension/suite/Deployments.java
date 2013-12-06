@@ -20,19 +20,38 @@ package org.eu.ingwar.tools.arquillian.extension.suite;
  * #L%
  */
 
+import org.eu.ingwar.tools.arquillian.extension.suite.normal.Extension1Test;
+import org.eu.ingwar.tools.arquillian.extension.suite.inject.InjectedObject;
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquilianSuiteDeployment;
+import org.eu.ingwar.tools.arquillian.extension.suite.extra.ExtensionExtra1Test;
 import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
+import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
+import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 
 @ArquilianSuiteDeployment
 public class Deployments {
 
-    @Deployment
-    public static WebArchive deploy() {
-        return ShrinkWrap.create(WebArchive.class)
+    @Deployment(order = 1, name = "normal")
+    public static WebArchive generateDefaultDeployment() {
+        return ShrinkWrap.create(WebArchive.class, "normal.war")
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
+                .addClass(Deployments.class)
+                .addClass(InjectedObject.class)
                 .addPackage(Extension1Test.class.getPackage());
     }
+    
+    @Deployment(order = 2, name = "extra")
+    public static Archive generateExtraDeployment() {
+        Archive ejb = ShrinkWrap.create(JavaArchive.class, "extra_ejb.jar")
+                .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
+                .addClass(Deployments.class)
+                .addClass(InjectedObject.class)
+                .addPackage(ExtensionExtra1Test.class.getPackage());
+        return ShrinkWrap.create(EnterpriseArchive.class, "extra.ear").addAsLibraries(ejb);
+    }
+    
 }

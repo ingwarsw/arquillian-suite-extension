@@ -1,4 +1,4 @@
-package org.eu.ingwar.tools.arquillian.extension.suite;
+package org.eu.ingwar.tools.arquillian.extension.suite.normal;
 
 /*
  * #%L
@@ -20,17 +20,22 @@ package org.eu.ingwar.tools.arquillian.extension.suite;
  * #L%
  */
 
+import org.eu.ingwar.tools.arquillian.extension.suite.Deployments;
+import org.eu.ingwar.tools.arquillian.extension.suite.inject.InjectedObject;
+import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(Arquillian.class)
-public class Extension2Test {
+public class Extension2Test extends Deployments {
 
     @Test
+    @OperateOnDeployment("normal")
     public void shouldInject(InjectedObject bm) {
-        System.out.println("Test2");
         Assert.assertNotNull(bm);
+        Assert.assertEquals(NormalInjectedObject.NAME, bm.getName());
+        System.out.println("Test2");
     }
 }

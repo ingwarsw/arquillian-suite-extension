@@ -1,5 +1,4 @@
-package org.eu.ingwar.tools.arquillian.extension.suite;
-
+package org.eu.ingwar.tools.arquillian.extension.suite.normal;
 /*
  * #%L
  * Arquillian suite extension
@@ -20,17 +19,17 @@ package org.eu.ingwar.tools.arquillian.extension.suite;
  * #L%
  */
 
-import org.jboss.arquillian.junit.Arquillian;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.eu.ingwar.tools.arquillian.extension.suite.inject.InjectedObject;
 
-@RunWith(Arquillian.class)
-public class Extension1TestIT {
-
-    @Test
-    public void shouldInject(InjectedObject bm) {
-        System.out.println("IT Test1");
-        Assert.assertNotNull(bm);
+/**
+ *
+ * @author Karol Lassak 'Ingwar' <ingwar@ingwar.eu.org>
+ */
+public class NormalInjectedObject implements InjectedObject {
+    public static final String NAME = "normal";
+    
+    public String getName() {
+        return NAME;
     }
+    
 }

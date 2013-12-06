@@ -24,6 +24,8 @@
     <engine>
         <!-- Restaarts managd instance every 200 tests -->
         <property name="maxTestClassesBeforeRestart">200</property>
+        <!-- Save deploument to target direstory -->
+        <property name="deploymentExportPath">target/</property>    
     </engine>
 
     <defaultProtocol type="Servlet 3.0"/>

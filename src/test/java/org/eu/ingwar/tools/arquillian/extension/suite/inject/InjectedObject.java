@@ -1,4 +1,4 @@
-package org.eu.ingwar.tools.arquillian.extension.suite;
+package org.eu.ingwar.tools.arquillian.extension.suite.inject;
 
 /*
  * #%L
@@ -24,6 +24,6 @@ package org.eu.ingwar.tools.arquillian.extension.suite;
  *
  * @author Ingwar
  */
-public class InjectedObject {
-    
+public interface InjectedObject {
+    String getName();
 }

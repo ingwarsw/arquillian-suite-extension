@@ -1,4 +1,4 @@
-package org.eu.ingwar.tools.arquillian.extension.suite;
+package org.eu.ingwar.tools.arquillian.extension.suite.extra;
 
 /*
  * #%L
@@ -19,18 +19,22 @@ package org.eu.ingwar.tools.arquillian.extension.suite;
  * limitations under the License.
  * #L%
  */
-
+import org.eu.ingwar.tools.arquillian.extension.suite.Deployments;
+import org.eu.ingwar.tools.arquillian.extension.suite.inject.InjectedObject;
+import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(Arquillian.class)
-public class Extension2TestIT {
+public class ExtensionExtra2Test extends Deployments {
 
     @Test
+    @OperateOnDeployment("extra")
     public void shouldInject(InjectedObject bm) {
-        System.out.println("IT Test2");
         Assert.assertNotNull(bm);
+        Assert.assertEquals(ExtendedInjectedObject.NAME, bm.getName());
+        System.out.println("Extra Test2");
     }
 }
