@@ -43,7 +43,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <version.arquillian_core>1.1.2.Final</version.arquillian_core>
-        <version.jacoco>0.6.3.201306030806</version.jacoco>
+        <version.jacoco>0.6.0.201210061924</version.jacoco>
         <version.jbossas>7.1.1.Final</version.jbossas>
         <version.glassfish>3.1.2.2</version.glassfish>
         
@@ -276,7 +276,7 @@
                 <dependency>
                     <groupId>org.jboss.arquillian.extension</groupId>
                     <artifactId>arquillian-jacoco</artifactId>
-                    <version>1.0.0.Final-SNAPSHOT</version>
+                    <version>1.0.0.Alpha5</version>
                     <scope>test</scope>
                 </dependency>
                 <dependency>
