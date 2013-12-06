@@ -14,6 +14,7 @@
     <version>1.0.4-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Arquillian suite extension</name>
+    <inceptionYear>2013</inceptionYear>
 
     <licenses>
         <license>
@@ -28,6 +29,11 @@
         <url>https://github.com:ingwarsw/arquillian-suite-extension</url>
         <tag>HEAD</tag>
     </scm>
+    
+    <organization>
+        <name>Ingwar &amp; co.</name>
+        <url>http://ingwar.eu.org</url>
+    </organization>
     
     <developers>
         <developer>

@@ -15,14 +15,15 @@ So far tested on:
 - Glassfish 3.2.2
 - Should work on other servers too
 
-Usage
------
+### Usage
 
-Add module to classpath.
+Add module to test classpath.
 
     <dependency>
         <groupId>org.jboss.arquillian.extension</groupId>
         <artifactId>arquillian-suite-extension</artifactId>
+        <version>1.0.3</version>
+        <scope>test</scope>
     </dependency>
 
 Mark one of your test classes with annotation @ArquilianSuiteDeployment along with usual @Deployment annotation on method.
@@ -44,11 +45,21 @@ Run test either from IDE or maven.
 
     <defaultProtocol type="Servlet 3.0"/>
 
-Credits
--------
+### Credits
 
 Most work was done by Aslak Knutsen
 - https://gist.github.com/aslakknutsen/3975179
 - Part was added by ItCrowd team.
 
 I just mixed things up..
+
+### Continuous integration
+
+Travis CI builds the plugin with Oracle and Open JDK 7. All successfully built snapshots are deployed to
+Sonatype OSS repository. Jacoco is used to gather coverage metrics and the report is submitted
+to Coveralls with this plugin.
+
+
+### License
+
+The project is licensed under the Apache License, Version 2.0.
