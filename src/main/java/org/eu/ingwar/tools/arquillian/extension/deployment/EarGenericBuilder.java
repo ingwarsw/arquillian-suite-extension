@@ -45,7 +45,7 @@ import org.jboss.shrinkwrap.resolver.api.maven.strategy.AcceptScopesStrategy;
 
 /**
  *
- * @author Karol Lassak 'Ingwar' <karol.lassak@coi.gov.pl>
+ * @author Karol Lassak 'Ingwar' <ingwar@ingwar.eu.org>
  */
 public class EarGenericBuilder {
 
@@ -53,13 +53,42 @@ public class EarGenericBuilder {
     private static final String RUN_AT_ARQUILLIAN_CONTENT = "at-arquillian";
 
     /**
-     * Pobiera deployment dla danego modułu aplikacji.
+     * Private constructor.
+     */
+    private EarGenericBuilder() {
+    }
+
+    /**
+     * Generates deployment for given application.
      *
-     * @param type typ modułu: EJB lub WAR
-     * @param artifact plik z artefaktem dla modułu
-     * @return archiwum Arquillian
+     * @param type Module type to generate
+     * @param basename Base name of module to generate
+     * @return EnterpriseArchive containing given module and all dependencies
+     */
+    public static EnterpriseArchive getModuleDeployment(ModuleType type) {
+        return getModuleDeployment(type, type.generateModuleName());
+    }
+
+    /**
+     * Generates deployment for given application.
+     *
+     * @param type Module type to generate
+     * @param basename Base name of module to generate
+     * @return EnterpriseArchive containing given module and all dependencies
      */
     public static EnterpriseArchive getModuleDeployment(ModuleType type, String basename) {
+        return getModuleDeployment(type, basename, true);
+    }
+
+    /**
+     * Generates deployment for given application.
+     *
+     * @param type Module type to generate
+     * @param basename Base name of module to generate
+     * @param doFiltering should do basic filtering
+     * @return EnterpriseArchive containing given module and all dependencies
+     */
+    public static EnterpriseArchive getModuleDeployment(ModuleType type, String basename, boolean doFiltering) {
         String name = basename + "." + type.getExtension();
         String testJarName = basename + "-tests.jar";
 //        LOG.debug("Creating Arquillian deployment for [" + name + "]");
@@ -98,8 +127,9 @@ public class EarGenericBuilder {
             for (MavenResolvedArtifact mra : deps) {
                 MavenCoordinate mc = mra.getCoordinate();
                 PackagingType packaging = mc.getPackaging();
-                if (isFiltered(mc))
+                if (doFiltering && isFiltered(mc)) {
                     continue;
+                }
                 System.out.println("Adding: " + mc.toCanonicalForm());
                 if (isArtifactEjb(mc)) {
                     // dependency w postaci ejb'ków
@@ -118,18 +148,20 @@ public class EarGenericBuilder {
 //            Archive<?> module = ShrinkWrap.create(MavenImporter.class, name)
 //                    .loadPomFromFile("pom.xml")
 //                    .as(type.getType());
-            
-             JavaArchive module = ShrinkWrap.create(ExplodedImporter.class, name)
-                    .importDirectory("target/classes")
-                    .as(JavaArchive.class);           
+
+            Archive<?> module = ShrinkWrap.create(ExplodedImporter.class, name)
+                    .importDirectory(type.getExplodedDir(basename))
+                    .as(type.getType());
 
             JavaArchive testJar = ShrinkWrap.create(ExplodedImporter.class, testJarName)
                     .importDirectory("target/test-classes")
                     .as(JavaArchive.class);
 
-            mergeReplace(ear, module, testJar);
+            module = module.merge(testJar, type.getMergePoint());
+//            mergeReplace(ear, module, testJar);
 
             module.add(new StringAsset(RUN_AT_ARQUILLIAN_CONTENT), RUN_AT_ARQUILLIAN_PATH);
+            System.out.println(module.toString(true));
 
             addMainModule(ear, type, module, descriptorBuilder);
 
@@ -137,6 +169,8 @@ public class EarGenericBuilder {
             ear.addManifest();
 //            ear.addAsResource(ArtifactVersion.VERSION_FILE);
 //            LOG.debug("Created deployment [" + ear.getName() + "]");
+            System.out.println(ear.toString(true));
+            System.out.println(descriptorBuilder.render());
             return ear;
         } catch (IllegalArgumentException | InvalidConfigurationFileException | ArchiveImportException ex) {
             throw new IllegalStateException("Błąd tworzenia deploymentu [" + ex + "]", ex);
@@ -211,17 +245,19 @@ public class EarGenericBuilder {
 
     /**
      * Check if artefact should be filtered (omitted from packaging).
-     * 
+     *
      * By default all artefact witch groups start with org.jboss.(shrinkwrap|arqrquillian) are filtered.
-     * 
+     *
      * @param artifactCoordinate Artifact coordinate to check
      * @return true if artifact should be filtered
      */
     private static boolean isFiltered(MavenCoordinate artifactCoordinate) {
-        if (artifactCoordinate.getGroupId().startsWith("org.jboss.shrinkwrap"))
+        if (artifactCoordinate.getGroupId().startsWith("org.jboss.shrinkwrap")) {
             return true;
-        if (artifactCoordinate.getGroupId().startsWith("org.jboss.arquillian"))
+        }
+        if (artifactCoordinate.getGroupId().startsWith("org.jboss.arquillian")) {
             return true;
+        }
         return false;
     }
 }

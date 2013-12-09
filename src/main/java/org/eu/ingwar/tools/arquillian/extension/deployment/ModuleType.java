@@ -15,27 +15,30 @@
  */
 package org.eu.ingwar.tools.arquillian.extension.deployment;
 
+import java.io.File;
+import java.util.Random;
 import org.jboss.shrinkwrap.api.Archive;
+import org.jboss.shrinkwrap.api.ArchivePath;
+import org.jboss.shrinkwrap.api.Filter;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 
 /**
- * Typ modułu archiwum.
+ * Type of generating arquillian module.
  *
- * @author Karol Lassak 'Ingwar' <karol.lassak@coi.gov.pl>
+ * @author Karol Lassak 'Ingwar' <ingwar@ingwar.eu.org>
  */
 public enum ModuleType {
 
     WAR("war"),
     EJB("ejb"),
     JAR("jar");
-    
     private String type;
 
     /**
-     * Domyślny konstruktor.
+     * Constructor.
      *
-     * @param type typ modułu
+     * @param type module type
      */
     private ModuleType(String type) {
         this.type = type;
@@ -102,5 +105,45 @@ public enum ModuleType {
             default:
                 throw new IllegalStateException("Illegal type for extension");
         }
+    }
+
+    /**
+     * Generates module name for given type.
+     *
+     * Adds random part to name.
+     *
+     * @return randomized module name
+     */
+    String generateModuleName() {
+        String name;
+        switch (this) {
+            case WAR:
+                name = "war";
+                break;
+            case EJB:
+                name = "ejb";
+                break;
+            case JAR:
+                name = "jar";
+            default:
+                throw new IllegalStateException("Illegal type for extension");
+        }
+        Random random = new Random();
+        name += "_module_" + random.nextInt();
+        return name;
+    }
+
+    String getMergePoint() {
+        if (this.equals(WAR)) {
+            return "WEB-INF/classes";
+        }
+        return "";
+    }
+
+    String getExplodedDir(String basename) {
+        if (this.equals(WAR)) {
+            return "target/" + basename;
+        }
+        return "target/classes";
     }
 }

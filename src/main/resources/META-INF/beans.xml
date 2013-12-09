@@ -3,4 +3,9 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:weld="http://jboss.org/schema/weld/beans"
        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/beans_1_0.xsd">
+    <weld:scan>
+        <weld:include name="**"/>
+        <!-- Don't deploy the classes witch are not runtime provided. -->
+        <weld:exclude name="org.eu.ingwar.tools.arquillian.extension.deployment.EarGenericBuilder" />
+    </weld:scan>
 </beans>
