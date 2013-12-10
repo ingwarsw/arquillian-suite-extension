@@ -15,8 +15,9 @@ env:
 
 matrix:
     allow_failures:
-        - PROFILE=test-glassfish-embeded
-   
+        - env: "PROFILE=test-glassfish-embeded"
+        - jdk: oraclejdk8
+           
 script: mvn install -P${PROFILE}
 
 after_success:
