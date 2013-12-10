@@ -43,4 +43,5 @@ public class ExtensionExtra2Test extends Deployments {
         Assert.assertNotNull(bm);
         Assert.assertEquals(ExtendedInjectedObject.NAME, bm.getName());
         System.out.println("Extra Test2 web");
-    }}
+    }
+}

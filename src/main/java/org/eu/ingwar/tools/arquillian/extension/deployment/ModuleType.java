@@ -15,11 +15,8 @@
  */
 package org.eu.ingwar.tools.arquillian.extension.deployment;
 
-import java.io.File;
 import java.util.Random;
 import org.jboss.shrinkwrap.api.Archive;
-import org.jboss.shrinkwrap.api.ArchivePath;
-import org.jboss.shrinkwrap.api.Filter;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 
@@ -125,6 +122,7 @@ public enum ModuleType {
                 break;
             case JAR:
                 name = "jar";
+                break;
             default:
                 throw new IllegalStateException("Illegal type for extension");
         }
