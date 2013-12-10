@@ -104,6 +104,13 @@
             <version>0.9.8</version>
         </dependency>
         
+        <dependency>
+            <groupId>org.jboss.spec.javax.ejb</groupId>
+            <artifactId>jboss-ejb-api_3.1_spec</artifactId>
+            <version>1.0.2.Final</version>
+            <scope>provided</scope>
+        </dependency>
+        
         <!--Test dependencies-->
         <dependency>
             <groupId>org.jboss.arquillian.protocol</groupId>
@@ -249,12 +256,6 @@
                     <version>${version.jbossas}</version>
                     <scope>test</scope>
                 </dependency>
-                <dependency>
-                    <groupId>org.jboss.spec.javax.ejb</groupId>
-                    <artifactId>jboss-ejb-api_3.1_spec</artifactId>
-                    <version>1.0.2.Final</version>
-                    <scope>provided</scope>
-                </dependency>
             </dependencies>
         </profile>
         
@@ -266,12 +267,6 @@
                     <artifactId>jboss-as-arquillian-container-managed</artifactId>
                     <version>${version.jbossas}</version>
                     <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.jboss.spec.javax.ejb</groupId>
-                    <artifactId>jboss-ejb-api_3.1_spec</artifactId>
-                    <version>1.0.2.Final</version>
-                    <scope>provided</scope>
                 </dependency>
             </dependencies>
             <build>
