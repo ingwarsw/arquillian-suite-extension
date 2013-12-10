@@ -31,6 +31,8 @@ import org.jboss.shrinkwrap.api.importer.ExplodedImporter;
 import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.jboss.shrinkwrap.impl.base.filter.ExcludeRegExpPaths;
+import org.jboss.shrinkwrap.impl.base.filter.IncludeRegExpPaths;
 import org.jboss.shrinkwrap.impl.base.path.BasicPath;
 import org.jboss.shrinkwrap.resolver.api.InvalidConfigurationFileException;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
@@ -40,6 +42,7 @@ import org.jboss.shrinkwrap.resolver.api.maven.MavenResolverSystem;
 import org.jboss.shrinkwrap.resolver.api.maven.PackagingType;
 import org.jboss.shrinkwrap.resolver.api.maven.PomEquippedResolveStage;
 import org.jboss.shrinkwrap.resolver.api.maven.ScopeType;
+import org.jboss.shrinkwrap.resolver.api.maven.archive.importer.MavenImporter;
 import org.jboss.shrinkwrap.resolver.api.maven.coordinate.MavenCoordinate;
 import org.jboss.shrinkwrap.resolver.api.maven.strategy.AcceptScopesStrategy;
 
@@ -164,6 +167,12 @@ public class EarGenericBuilder {
             System.out.println(module.toString(true));
 
             addMainModule(ear, type, module, descriptorBuilder);
+            
+            // Workaround for arquillian bug
+            if (!descriptorBuilder.containsWar()) {
+                ear.addAsModule(ShrinkWrap.create(WebArchive.class, "test.war"));
+                descriptorBuilder.addWeb("test.war", "test");
+            }
 
             ear.setApplicationXML(new StringAsset(descriptorBuilder.render()));
             ear.addManifest();
@@ -220,28 +229,28 @@ public class EarGenericBuilder {
         }
     }
 
-    /**
-     * Merges additional (usualy test) archive into main module.
-     *
-     * @param module main module
-     * @param additional module
-     */
-    private static void mergeReplace(EnterpriseArchive ear, Archive<?> module, Archive<?> additional) {
-        for (Map.Entry<ArchivePath, Node> entry : additional.getContent().entrySet()) {
-            ArchivePath ap = new BasicPath(entry.getKey().get());
-            if (module.contains(ap) && module.get(ap).getAsset() != null) {
-                module.delete(ap);
-            }
-            Asset asset = entry.getValue().getAsset();
-            if (asset == null) {
-                module.addAsDirectory(ap);
-            } else if ("/META-INF/jboss-deployment-structure.xml".equals(ap.get())) {
-                ear.add(asset, ap);
-            } else {
-                module.add(asset, ap);
-            }
-        }
-    }
+//    /**
+//     * Merges additional (usualy test) archive into main module.
+//     *
+//     * @param module main module
+//     * @param additional module
+//     */
+//    private static void mergeReplace(EnterpriseArchive ear, Archive<?> module, Archive<?> additional) {
+//        for (Map.Entry<ArchivePath, Node> entry : additional.getContent().entrySet()) {
+//            ArchivePath ap = new BasicPath(entry.getKey().get());
+//            if (module.contains(ap) && module.get(ap).getAsset() != null) {
+//                module.delete(ap);
+//            }
+//            Asset asset = entry.getValue().getAsset();
+//            if (asset == null) {
+//                module.addAsDirectory(ap);
+//            } else if ("/META-INF/jboss-deployment-structure.xml".equals(ap.get())) {
+//                ear.add(asset, ap);
+//            } else {
+//                module.add(asset, ap);
+//            }
+//        }
+//    }
 
     /**
      * Check if artefact should be filtered (omitted from packaging).

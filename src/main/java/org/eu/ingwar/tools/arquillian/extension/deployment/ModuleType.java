@@ -129,7 +129,7 @@ public enum ModuleType {
                 throw new IllegalStateException("Illegal type for extension");
         }
         Random random = new Random();
-        name += "_module_" + random.nextInt();
+        name += "_module_" + random.nextInt(Integer.MAX_VALUE);
         return name;
     }
 

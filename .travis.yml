@@ -11,7 +11,11 @@ env:
   matrix:
     - PROFILE=test-glassfish-embeded
     - PROFILE=test-jboss-managed,coveralls-coverage
-    
+
+matrix:
+    allow_failures:
+        - PROFILE=test-glassfish-embeded
+   
 script: mvn install -P${PROFILE}
 
 after_success:
