@@ -18,37 +18,14 @@ package org.eu.ingwar.tools.arquillian.extension.deployment;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
  *
- * @author Karol Lassak 'Ingwar' <karol.lassak@coi.gov.pl>
+ * @author Karol Lassak 'Ingwar' <ingwar@ingwar.eu.org>
  */
 public class ModuleTypeTest {
-    
-    public ModuleTypeTest() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
 
     /**
      * Test of valueOf method, of class ModuleType.
