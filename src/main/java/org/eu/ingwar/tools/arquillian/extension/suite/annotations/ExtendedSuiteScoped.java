@@ -32,7 +32,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 /**
  * Anntotate Extended Suite.
  * 
- * @author Karol Lassak <ingwar@ingwar.eu.org>
+ * @author Karol Lassak 'Ingwar'
  */
 @Scope
 @Documented

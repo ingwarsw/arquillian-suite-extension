@@ -30,7 +30,7 @@ import java.lang.annotation.Annotation;
 /**
  * Implementation of ExtendedScopeContext.
  *
- * @author Karol Lassak <ingwar@ingwar.eu.org>
+ * @author Karol Lassak 'Ingwar'
  */
 public class ExtendedSuiteContextImpl extends AbstractContext<String> implements ExtendedSuiteContext {
 

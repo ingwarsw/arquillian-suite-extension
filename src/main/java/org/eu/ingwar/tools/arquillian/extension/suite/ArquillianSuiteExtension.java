@@ -54,7 +54,7 @@ import org.reflections.Reflections;
 /**
  * Arquillian Suite Extension main class.
  *
- * @author Karol Lassak <ingwar@ingwar.eu.org>
+ * @author Karol Lassak 'Ingwar'
  */
 public class ArquillianSuiteExtension implements LoadableExtension {
     

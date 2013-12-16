@@ -48,7 +48,7 @@ import org.jboss.shrinkwrap.resolver.api.maven.strategy.AcceptScopesStrategy;
 
 /**
  *
- * @author Karol Lassak 'Ingwar' <ingwar@ingwar.eu.org>
+ * @author Karol Lassak 'Ingwar'
  */
 public class EarGenericBuilder {
 
@@ -65,7 +65,6 @@ public class EarGenericBuilder {
      * Generates deployment for given application.
      *
      * @param type Module type to generate
-     * @param basename Base name of module to generate
      * @return EnterpriseArchive containing given module and all dependencies
      */
     public static EnterpriseArchive getModuleDeployment(ModuleType type) {

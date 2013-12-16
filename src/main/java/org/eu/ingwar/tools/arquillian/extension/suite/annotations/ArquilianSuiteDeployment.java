@@ -32,7 +32,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 /**
  * Annotate main class for Arquillian deployment.
  * 
- * @author Karol Lassak <ingwar@ingwar.eu.org>
+ * In each project can be only one class marked witch that annotation
+ * 
+ * @author Karol Lassak 'Ingwar'
  */
 @Scope
 @Documented

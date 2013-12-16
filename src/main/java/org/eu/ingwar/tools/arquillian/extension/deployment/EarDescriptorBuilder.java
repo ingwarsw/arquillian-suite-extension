@@ -38,7 +38,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 /**
- * Builder do deskrptora Ear'a.
+ * Builder for application.xml files for EAR's.
+ * 
+ * @author Karol Lassak 'Ingwar'
  */
 public class EarDescriptorBuilder {
 
@@ -49,24 +51,20 @@ public class EarDescriptorBuilder {
     private Element rootElement;
     private boolean addRandom = true;
 
-    public void setAddRandom(boolean addRandom) {
-        this.addRandom = addRandom;
-    }
-
     /**
-     * Konstruktor.
+     * Constructor.
      *
-     * @param basename bazowa nazwa dla Eara
+     * @param basename basename for ear
      */
     public EarDescriptorBuilder(String basename) {
         this.basename = basename;
     }
 
     /**
-     * Dodaje moduł EJB.
+     * Adds EJB module to descriptor.
      *
-     * @param filename nazwa
-     * @return this
+     * @param filename name of EJB name to add
+     * @return this object
      */
     public EarDescriptorBuilder addEjb(String filename) {
         this.ejbs.add(filename);
@@ -74,11 +72,11 @@ public class EarDescriptorBuilder {
     }
 
     /**
-     * Dodaje moduł webowy.
+     * Adds WEB module to descriptor.
      *
-     * @param filename nazwa
-     * @param context kontekst
-     * @return this
+     * @param filename name of WAR to add
+     * @param context web context to set for WEB module
+     * @return this object
      */
     public EarDescriptorBuilder addWeb(String filename, String context) {
         Map.Entry<String, String> entry = new AbstractMap.SimpleEntry<>(filename, context);
@@ -87,10 +85,12 @@ public class EarDescriptorBuilder {
     }
 
     /**
-     * Dodaje moduł webowy.
+     * Adds WEB module to descriptor.
+     * 
+     * Context will be generated automaticly, based on name of WAR name
      *
-     * @param filename nazwa
-     * @return this
+     * @param filename name of WAR to add
+     * @return this object
      */
     public EarDescriptorBuilder addWeb(String filename) {
         String context;
@@ -103,19 +103,31 @@ public class EarDescriptorBuilder {
     }
 
     /**
-     * Usuwa rozszerzenie z nazwy pliku.
+     * Sets if {@link addWeb} should generate randomized name for context.
+     * <p>
+     * default true
+     * </p>
+     * @param addRandom should generate random name for web context
+     */
+    public void setAddRandom(boolean addRandom) {
+        this.addRandom = addRandom;
+    }
+
+
+    /**
+     * Removes extension from filename.
      *
-     * @param filename nazwa pliku
-     * @return plik bez rozszerzenia
+     * @param filename name of war/jar/web module
+     * @return filename without extension
      */
     private String removeExtension(String filename) {
         return filename.replaceAll("\\.[a-z]{2,}$", "");
     }
 
     /**
-     * Renderuje XML aplikacji.
+     * Renders application.xml filr for application.
      *
-     * @return aplication xml
+     * @return aplication.xml as string
      */
     public String render() {
         try {
@@ -169,9 +181,9 @@ public class EarDescriptorBuilder {
     }
 
     /**
-     * Zapis webowego modułu.
+     * Writes WEB part to application.xml.
      *
-     * @param filename nazwa pliku
+     * @param filename name of module
      * @param context context
      */
     private void writeWebModule(String filename, String context) {
@@ -187,9 +199,9 @@ public class EarDescriptorBuilder {
     }
 
     /**
-     * Zapisuje moduł EJB.
+     * Writes WEB part to application.xml.
      *
-     * @param filename nazwa pliku
+     * @param filename name of module
      */
     private void writeEjbModule(String filename) {
         Element element = writeModule();
@@ -199,9 +211,9 @@ public class EarDescriptorBuilder {
     }
 
     /**
-     * Zapisuje moduł.
+     * Wrires any module (generates element).
      *
-     * @return element
+     * @return element to write data to
      */
     private Element writeModule() {
         Element element = doc.createElement("module");
@@ -209,6 +221,11 @@ public class EarDescriptorBuilder {
         return element;
     }
 
+    /**
+     * Check if descriptor contains any WEB module.
+     * 
+     * @return true if contains any WEB module
+     */
     boolean containsWar() {
         return !webs.isEmpty();
     }

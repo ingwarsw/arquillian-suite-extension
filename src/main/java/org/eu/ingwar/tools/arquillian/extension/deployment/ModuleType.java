@@ -23,7 +23,7 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 /**
  * Type of generating arquillian module.
  *
- * @author Karol Lassak 'Ingwar' <ingwar@ingwar.eu.org>
+ * @author Karol Lassak 'Ingwar'
  */
 public enum ModuleType {
 
