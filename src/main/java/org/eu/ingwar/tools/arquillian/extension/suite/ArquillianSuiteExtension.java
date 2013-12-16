@@ -19,7 +19,6 @@ package org.eu.ingwar.tools.arquillian.extension.suite;
  * limitations under the License.
  * #L%
  */
-
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ExtendedSuiteScoped;
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquilianSuiteDeployment;
 import java.util.Set;
@@ -58,13 +57,42 @@ import org.reflections.Reflections;
  * @author Karol Lassak <ingwar@ingwar.eu.org>
  */
 public class ArquillianSuiteExtension implements LoadableExtension {
+    
+
+    private static Class<?> deploymentClass;
 
     /**
      * {@inheritDoc}
      */
     @Override
     public void register(ExtensionBuilder builder) {
-        builder.observer(SuiteDeployer.class).context(ExtendedSuiteContextImpl.class);
+        deploymentClass = getDeploymentClass();
+        if (deploymentClass != null) {
+            builder.observer(SuiteDeployer.class).context(ExtendedSuiteContextImpl.class);
+        } else {
+            System.err.println("WARNING: arquillian-suite-deployment: Cannot find class annotated with @ArquilianSuiteDeployment, will try normal way..");
+        }
+    }
+
+    /**
+     * Finds class with should produce global deployment for project.
+     *
+     * @return class marked witch
+     * @ArquilianSuiteDeployment annotation
+     */
+    private static Class<?> getDeploymentClass() {
+        Reflections reflections = new Reflections("");
+        Set<Class<?>> results = reflections.getTypesAnnotatedWith(ArquilianSuiteDeployment.class, true);
+        if (results.isEmpty()) {
+            return null;
+        }
+        if (results.size() > 1) {
+            for (Class<?> type : results) {
+                System.err.println("ERROR: arquillian-suite-deployment: Duplicated class annotated with @ArquilianSuiteDeployment: " + type.getName());
+            }
+            throw new IllegalStateException("Duplicated classess annotated with @ArquilianSuiteDeployment");
+        }
+        return results.iterator().next();
     }
 
     /**
@@ -77,7 +105,6 @@ public class ArquillianSuiteExtension implements LoadableExtension {
         @Inject
         @ClassScoped
         private InstanceProducer<DeploymentScenario> classDeploymentScenario;
-        private Class<?> deploymentClass;
         @Inject
         private Event<DeploymentEvent> deploymentEvent;
         @Inject
@@ -100,8 +127,7 @@ public class ArquillianSuiteExtension implements LoadableExtension {
         }
 
         /**
-         * Method ignoring GenerateDeployment events if deployment is already
-         * done.
+         * Method ignoring GenerateDeployment events if deployment is already done.
          *
          * @param eventContext Event to ignore or fire.
          */
@@ -125,7 +151,7 @@ public class ArquillianSuiteExtension implements LoadableExtension {
 
         /**
          * Deploy event.
-         * 
+         *
          * @param event event to observe
          * @param registry ContainerRegistry
          */
@@ -147,7 +173,7 @@ public class ArquillianSuiteExtension implements LoadableExtension {
 
         /**
          * Calls operation in deployment class scope.
-         * 
+         *
          * @param call Callable to call
          */
         private void executeInClassScope(Callable<Void> call) {
@@ -163,7 +189,7 @@ public class ArquillianSuiteExtension implements LoadableExtension {
 
         /**
          * Iterate in Registry to find ours container.
-         * 
+         *
          * @param registry registy to find container in
          * @param deployable container to find
          * @return found container
@@ -178,36 +204,12 @@ public class ArquillianSuiteExtension implements LoadableExtension {
         }
 
         /**
-         * Finds class with should produce global deployment for project.
-         * 
-         * @return class marked witch @ArquilianSuiteDeployment annotation
-         */
-        private Class<?> getDeploymentClass() {
-            Reflections reflections = new Reflections("");
-            Set<Class<?>> results = reflections.getTypesAnnotatedWith(ArquilianSuiteDeployment.class, true);
-
-            if (results.isEmpty()) {
-                System.err.println("ERROR: arquillian-suite-deployment: Cannot find class annotated with @ArquilianSuiteDeployment");
-                throw new IllegalArgumentException("Cannot find class annotated with @ArquilianSuiteDeployment");
-            }
-            if (results.size() > 1) {
-                for (Class<?> type : results) {
-                    System.err.println("ERROR: arquillian-suite-deployment: Duplicated class annotated with @ArquilianSuiteDeployment: " + type.getName());
-                }
-                throw new IllegalArgumentException("Duplicated classess annotated with @ArquilianSuiteDeployment");
-            }
-            return results.iterator().next();
-        }
-
-        /**
          * Startup event.
-         * 
+         *
          * @param event event to observe
          * @param descriptor ArquillianDescriptor
          */
         public void startup(@Observes(precedence = -100) ManagerStarted event, ArquillianDescriptor descriptor) {
-            deploymentClass = getDeploymentClass();
-
             executeInClassScope(new Callable<Void>() {
                 @Override
                 public Void call() {
@@ -226,7 +228,7 @@ public class ArquillianSuiteExtension implements LoadableExtension {
 
         /**
          * Undeploy event.
-         * 
+         *
          * @param event event to observe
          * @param registry ContainerRegistry
          */
