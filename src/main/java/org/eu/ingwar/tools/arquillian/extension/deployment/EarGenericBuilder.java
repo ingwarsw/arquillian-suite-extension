@@ -170,8 +170,9 @@ public class EarGenericBuilder {
             
             // Workaround for arquillian bug
             if (!descriptorBuilder.containsWar()) {
-                ear.addAsModule(ShrinkWrap.create(WebArchive.class, "test.war"));
-                descriptorBuilder.addWeb("test.war", "test");
+                String testModuleName = ModuleType.WAR.generateModuleName() + ".war";
+                ear.addAsModule(ShrinkWrap.create(WebArchive.class, testModuleName));
+                descriptorBuilder.addWeb(testModuleName);
             }
 
             ear.setApplicationXML(new StringAsset(descriptorBuilder.render()));
