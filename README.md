@@ -22,7 +22,7 @@ Add module to test classpath.
     <dependency>
         <groupId>org.jboss.arquillian.extension</groupId>
         <artifactId>arquillian-suite-extension</artifactId>
-        <version>1.0.3</version>
+        <version>1.0.4</version>
         <scope>test</scope>
     </dependency>
 
