@@ -195,13 +195,13 @@ public class EarGenericBuilder {
      * @return true jesli jest projektem ejb
      */
     private static boolean isArtifactEjb(MavenCoordinate artifactCoordinate) {
+        if ("client".equals(artifactCoordinate.getClassifier())) {
+            return false;
+        }
         if (!artifactCoordinate.getGroupId().startsWith("pl.gov.coi")) {
             return false;
         }
         if (!artifactCoordinate.getArtifactId().toLowerCase().contains("ejb")) {
-            return false;
-        }
-        if ("client".equals(artifactCoordinate.getClassifier())) {
             return false;
         }
         return true;
@@ -254,9 +254,9 @@ public class EarGenericBuilder {
 
     /**
      * Check if artefact should be filtered (omitted from packaging).
-     *
+     * <p>
      * By default all artefact witch groups start with org.jboss.(shrinkwrap|arqrquillian) are filtered.
-     *
+     * </p>
      * @param artifactCoordinate Artifact coordinate to check
      * @return true if artifact should be filtered
      */
