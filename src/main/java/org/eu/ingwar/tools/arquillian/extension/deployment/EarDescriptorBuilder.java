@@ -103,7 +103,7 @@ public class EarDescriptorBuilder {
     }
 
     /**
-     * Sets if {@link addWeb} should generate randomized name for context.
+     * Sets if {@link #addWeb(String)} should generate randomized name for context.
      * <p>
      * default true
      * </p>
