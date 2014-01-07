@@ -20,7 +20,7 @@ So far tested on:
 Add module to test classpath.
 
     <dependency>
-        <groupId>org.jboss.arquillian.extension</groupId>
+        <groupId>org.eu.ingwar.tools</groupId>
         <artifactId>arquillian-suite-extension</artifactId>
         <version>1.0.4</version>
         <scope>test</scope>
@@ -119,7 +119,7 @@ I just mixed things up..
 
 Travis CI builds the plugin with Oracle and Open JDK 7. All successfully built snapshots are deployed to
 Sonatype OSS repository. Jacoco is used to gather coverage metrics and the report is submitted
-to Coveralls with this plugin.
+to Coveralls.
 
 
 ## License
