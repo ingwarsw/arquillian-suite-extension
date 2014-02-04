@@ -21,6 +21,7 @@ package org.eu.ingwar.tools.arquillian.extension.suite;
  */
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ExtendedSuiteScoped;
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuiteDeployment;
+import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquilianSuiteDeployment;
 import java.util.Set;
 import org.jboss.arquillian.config.descriptor.api.ArquillianDescriptor;
 import org.jboss.arquillian.container.spi.Container;
@@ -84,7 +85,10 @@ public class ArquillianSuiteExtension implements LoadableExtension {
         Reflections reflections = new Reflections("");
         Set<Class<?>> results = reflections.getTypesAnnotatedWith(ArquillianSuiteDeployment.class, true);
         if (results.isEmpty()) {
-            return null;
+            results = reflections.getTypesAnnotatedWith(ArquilianSuiteDeployment.class, true);
+            if (results.isEmpty()) {
+                return null;
+            }
         }
         if (results.size() > 1) {
             for (Class<?> type : results) {
