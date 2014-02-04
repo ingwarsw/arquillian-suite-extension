@@ -40,6 +40,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Retention(RUNTIME)
 @Target(ElementType.TYPE)
-public @interface ArquilianSuiteDeployment {
+public @interface ArquillianSuiteDeployment {
 
 }

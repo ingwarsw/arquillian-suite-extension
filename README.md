@@ -6,7 +6,7 @@ The Arquillian Suite Extension
 
 The Extension will force all Classes in a Module into a TestSuite running from the same DeploymentScenario.
 
-Class marked with @ArquilianSuiteDeployment will be used as a 'template' for all other TestClass scenarios.
+Class marked with @ArquillianSuiteDeployment will be used as a 'template' for all other TestClass scenarios.
 
 Deploy will occur only once on first test witch require Arquillian.
 
@@ -26,9 +26,9 @@ Add module to test classpath.
         <scope>test</scope>
     </dependency>
 
-Mark one of your test classes with annotation @ArquilianSuiteDeployment along with usual @Deployment annotation on method.
+Mark one of your test classes with annotation @ArquillianSuiteDeployment along with usual @Deployment annotation on method.
 
-    @ArquilianSuiteDeployment
+    @ArquillianSuiteDeployment
     public class Deployments {
 
         @Deployment
@@ -68,7 +68,7 @@ Basic usage for EJB module looks like.
 
 As with normal arquillian you can define more than one deployment and then force tests to run on one of them.
 
-    @ArquilianSuiteDeployment
+    @ArquillianSuiteDeployment
     public class Deployments {
 
         @Deployment(name = "normal")

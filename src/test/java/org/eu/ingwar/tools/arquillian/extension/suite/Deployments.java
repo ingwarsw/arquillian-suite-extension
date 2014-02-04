@@ -25,7 +25,7 @@ import org.eu.ingwar.tools.arquillian.extension.deployment.EarGenericBuilder;
 import org.eu.ingwar.tools.arquillian.extension.deployment.ModuleType;
 import org.eu.ingwar.tools.arquillian.extension.suite.normal.Extension1Test;
 import org.eu.ingwar.tools.arquillian.extension.suite.inject.InjectedObject;
-import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquilianSuiteDeployment;
+import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuiteDeployment;
 import org.eu.ingwar.tools.arquillian.extension.suite.extra.ExtensionExtra1Test;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.Archive;
@@ -34,7 +34,7 @@ import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 
-@ArquilianSuiteDeployment
+@ArquillianSuiteDeployment
 public class Deployments {
 
     @Deployment(name = "normal")

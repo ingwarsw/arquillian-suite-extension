@@ -20,7 +20,7 @@ package org.eu.ingwar.tools.arquillian.extension.suite;
  * #L%
  */
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ExtendedSuiteScoped;
-import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquilianSuiteDeployment;
+import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuiteDeployment;
 import java.util.Set;
 import org.jboss.arquillian.config.descriptor.api.ArquillianDescriptor;
 import org.jboss.arquillian.container.spi.Container;
@@ -70,7 +70,7 @@ public class ArquillianSuiteExtension implements LoadableExtension {
         if (deploymentClass != null) {
             builder.observer(SuiteDeployer.class).context(ExtendedSuiteContextImpl.class);
         } else {
-            System.err.println("WARNING: arquillian-suite-deployment: Cannot find class annotated with @ArquilianSuiteDeployment, will try normal way..");
+            System.err.println("WARNING: arquillian-suite-deployment: Cannot find class annotated with @ArquillianSuiteDeployment, will try normal way..");
         }
     }
 
@@ -78,19 +78,19 @@ public class ArquillianSuiteExtension implements LoadableExtension {
      * Finds class with should produce global deployment for project.
      *
      * @return class marked witch
-     * @ArquilianSuiteDeployment annotation
+     * @ArquillianSuiteDeployment annotation
      */
     private static Class<?> getDeploymentClass() {
         Reflections reflections = new Reflections("");
-        Set<Class<?>> results = reflections.getTypesAnnotatedWith(ArquilianSuiteDeployment.class, true);
+        Set<Class<?>> results = reflections.getTypesAnnotatedWith(ArquillianSuiteDeployment.class, true);
         if (results.isEmpty()) {
             return null;
         }
         if (results.size() > 1) {
             for (Class<?> type : results) {
-                System.err.println("ERROR: arquillian-suite-deployment: Duplicated class annotated with @ArquilianSuiteDeployment: " + type.getName());
+                System.err.println("ERROR: arquillian-suite-deployment: Duplicated class annotated with @ArquillianSuiteDeployment: " + type.getName());
             }
-            throw new IllegalStateException("Duplicated classess annotated with @ArquilianSuiteDeployment");
+            throw new IllegalStateException("Duplicated classess annotated with @ArquillianSuiteDeployment");
         }
         return results.iterator().next();
     }
