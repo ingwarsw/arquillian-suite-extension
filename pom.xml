@@ -11,7 +11,7 @@
 
     <groupId>org.eu.ingwar.tools</groupId>
     <artifactId>arquillian-suite-extension</artifactId>
-    <version>1.0.5-SNAPSHOT</version>
+    <version>1.0.6-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Arquillian suite extension</name>
     <inceptionYear>2013</inceptionYear>
