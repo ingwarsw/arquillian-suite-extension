@@ -45,8 +45,8 @@ import org.w3c.dom.Element;
 public class EarDescriptorBuilder {
 
     private final String basename;
-    private final List<String> ejbs = new ArrayList<>();
-    private final List<Map.Entry<String, String>> webs = new ArrayList<>();
+    private final List<String> ejbs = new ArrayList<String>();
+    private final List<Map.Entry<String, String>> webs = new ArrayList<Map.Entry<String, String>>();
     private Document doc;
     private Element rootElement;
     private boolean addRandom = true;
@@ -79,7 +79,7 @@ public class EarDescriptorBuilder {
      * @return this object
      */
     public EarDescriptorBuilder addWeb(String filename, String context) {
-        Map.Entry<String, String> entry = new AbstractMap.SimpleEntry<>(filename, context);
+        Map.Entry<String, String> entry = new AbstractMap.SimpleEntry<String, String>(filename, context);
         this.webs.add(entry);
         return this;
     }
@@ -175,7 +175,9 @@ public class EarDescriptorBuilder {
             transformer.transform(source, result);
 
             return bytes.toString();
-        } catch (TransformerException | ParserConfigurationException ex) {
+        } catch (TransformerException ex) {
+            throw new IllegalStateException(ex);
+        } catch (ParserConfigurationException ex) {
             throw new IllegalStateException(ex);
         }
     }

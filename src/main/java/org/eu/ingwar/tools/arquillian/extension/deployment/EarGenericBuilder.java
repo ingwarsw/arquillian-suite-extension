@@ -181,7 +181,11 @@ public class EarGenericBuilder {
             System.out.println(ear.toString(true));
             System.out.println(descriptorBuilder.render());
             return ear;
-        } catch (IllegalArgumentException | InvalidConfigurationFileException | ArchiveImportException ex) {
+        } catch (IllegalArgumentException ex) {
+            throw new IllegalStateException("Błąd tworzenia deploymentu [" + ex + "]", ex);
+        } catch (InvalidConfigurationFileException ex) {
+            throw new IllegalStateException("Błąd tworzenia deploymentu [" + ex + "]", ex);
+        } catch (ArchiveImportException ex) {
             throw new IllegalStateException("Błąd tworzenia deploymentu [" + ex + "]", ex);
         }
     }
