@@ -51,6 +51,19 @@ Or mark your deployments with annotation @OverProtocol("Servlet 3.0")
 
 # Extended usage
 
+## Getting SNAPSHOT versions of the plugin
+If you really want to use **snapshots**, here's the repository they are deployed to.
+
+```xml
+<pluginRepositories>
+    <pluginRepository>
+        <id>sonatype-snapshots</id>
+        <name>Sonatype Snapshots</name>
+        <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+    </pluginRepository>
+</pluginRepositories>
+```
+
 ## Generic builder
 
 That project contains generic builder with should work for most simple J2EE cases.
