@@ -18,7 +18,14 @@ matrix:
     allow_failures:
         - env: "PROFILE=test-glassfish-embeded"
         - jdk: oraclejdk8
-           
+# Since current version of jacoco is not working with java8 lets skip it 
+    exclude:
+        - jdk: oraclejdk8
+          env: "PROFILE=test-jboss-managed,coveralls-coverage"
+    include:
+        - jdk: oraclejdk8
+          env: "PROFILE=test-jboss-managed"
+ 
 script: mvn install -P${PROFILE}
 
 after_success:
