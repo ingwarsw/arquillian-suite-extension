@@ -52,7 +52,7 @@ public enum ModuleType {
      * @param packaging nazwa typu pakowania
      * @return typ modułu
      */
-    private static ModuleType fromString(String packaging) {
+    public static ModuleType fromString(String packaging) {
         for (ModuleType moduleType : ModuleType.values()) {
             if (moduleType.type.equals(packaging)) {
                 return moduleType;

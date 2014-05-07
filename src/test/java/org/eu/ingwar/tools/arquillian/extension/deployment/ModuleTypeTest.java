@@ -95,6 +95,21 @@ public class ModuleTypeTest {
     }
 
     /**
+     * Test of fromString method, of class ModuleType.
+     */
+    @Test
+    public void testFromString() {
+        testFromStringOne(ModuleType.JAR, "jar");
+        testFromStringOne(ModuleType.EJB, "ejb");
+        testFromStringOne(ModuleType.WAR, "war");
+    }
+    
+    private void testFromStringOne(ModuleType expected, String type) {
+        ModuleType result = ModuleType.fromString(type);
+        assertEquals(expected, result);        
+    }
+
+    /**
      * Test of generateModuleName method, of class ModuleType.
      */
     @Test
