@@ -35,6 +35,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * In each project can be only one class marked witch that annotation
  * 
  * @author Karol Lassak 'Ingwar'
+ * @deprecated 
  */
 @Scope
 @Documented

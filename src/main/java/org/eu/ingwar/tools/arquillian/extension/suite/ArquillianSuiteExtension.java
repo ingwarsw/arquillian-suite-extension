@@ -213,7 +213,6 @@ public class ArquillianSuiteExtension implements LoadableExtension {
         /**
          * Startup event.
          *
-         * @param event event to observe
          * @param descriptor ArquillianDescriptor
          */
         public void startup(@Observes(precedence = -100) ArquillianDescriptor descriptor) {

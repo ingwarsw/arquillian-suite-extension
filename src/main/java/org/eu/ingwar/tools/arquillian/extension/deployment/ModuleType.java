@@ -27,8 +27,17 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
  */
 public enum ModuleType {
 
+    /**
+     * WAR archive.
+     */
     WAR("war"),
+    /**
+     * EJB archive.
+     */
     EJB("ejb"),
+    /**
+     * JAR archive.
+     */
     JAR("jar");
     private String type;
 
