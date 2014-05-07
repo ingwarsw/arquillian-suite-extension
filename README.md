@@ -139,7 +139,3 @@ to Coveralls.
 ## License
 
 The project is licensed under the Apache License, Version 2.0.
-
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/ingwarsw/arquillian-suite-extension/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
