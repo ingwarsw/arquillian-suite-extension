@@ -23,6 +23,9 @@ matrix:
     exclude:
         - jdk: oraclejdk8
           env: "PROFILE=test-jboss-managed,coveralls-coverage"
+# skip wildfly on java 6, not working neither
+        - jdk: openjdk6
+          env: "PROFILE=test-wildfly-managed"
     include:
         - jdk: oraclejdk8
           env: "PROFILE=test-jboss-managed"
