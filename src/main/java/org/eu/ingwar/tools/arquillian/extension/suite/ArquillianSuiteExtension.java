@@ -49,6 +49,8 @@ import org.jboss.arquillian.test.spi.annotation.ClassScoped;
 import org.jboss.arquillian.test.spi.context.ClassContext;
 
 import java.util.concurrent.Callable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.reflections.Reflections;
 
 /**
@@ -58,6 +60,7 @@ import org.reflections.Reflections;
  */
 public class ArquillianSuiteExtension implements LoadableExtension {
     
+    private static final Logger LOG = Logger.getLogger(ArquillianSuiteExtension.class.getName());
 
     private static Class<?> deploymentClass;
 
@@ -70,7 +73,7 @@ public class ArquillianSuiteExtension implements LoadableExtension {
         if (deploymentClass != null) {
             builder.observer(SuiteDeployer.class).context(ExtendedSuiteContextImpl.class);
         } else {
-            System.err.println("WARNING: arquillian-suite-deployment: Cannot find class annotated with @ArquillianSuiteDeployment, will try normal way..");
+            LOG.severe("WARNING: arquillian-suite-deployment: Cannot find class annotated with @ArquillianSuiteDeployment, will try normal way..");
         }
     }
 
@@ -91,7 +94,7 @@ public class ArquillianSuiteExtension implements LoadableExtension {
         }
         if (results.size() > 1) {
             for (Class<?> type : results) {
-                System.err.println("ERROR: arquillian-suite-deployment: Duplicated class annotated with @ArquillianSuiteDeployment: " + type.getName());
+                LOG.log(Level. SEVERE, "ERROR: arquillian-suite-deployment: Duplicated class annotated with @ArquillianSuiteDeployment: {0}", type.getName());
             }
             throw new IllegalStateException("Duplicated classess annotated with @ArquillianSuiteDeployment");
         }
@@ -162,7 +165,8 @@ public class ArquillianSuiteExtension implements LoadableExtension {
             executeInClassScope(new Callable<Void>() {
                 @Override
                 public Void call() {
-                    for (Deployment d : suiteDeploymentScenario.deployments()) {
+                    for (Deployment d : suiteDeploymentScenario.managedDeploymentsInDeployOrder()) {
+                        LOG.log(Level.FINER, "DEPLOY: {0} prio {1}", new Object[]{ d.getDescription().getName(), d.getDescription().getOrder() });
                         deploymentEvent.fire(new DeployDeployment(findContainer(registry, event.getDeployableContainer()), d));
                     }
                     final ExtendedSuiteContext extendedSuiteContextLocal = SuiteDeployer.this.extendedSuiteContext.get();
@@ -239,7 +243,8 @@ public class ArquillianSuiteExtension implements LoadableExtension {
             executeInClassScope(new Callable<Void>() {
                 @Override
                 public Void call() {
-                    for (Deployment d : suiteDeploymentScenario.deployments()) {
+                    for (Deployment d : suiteDeploymentScenario.deployedDeploymentsInUnDeployOrder()) {
+                        LOG.log(Level.FINER, "UNDEPLOY: {0}", d.getDescription().getName());
                         deploymentEvent.fire(new UnDeployDeployment(findContainer(registry, event.getDeployableContainer()), d));
                     }
                     return null;
