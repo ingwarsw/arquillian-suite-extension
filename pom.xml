@@ -311,9 +311,6 @@
         
         <profile>
             <id>test-wildfly-managed</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
             <properties>
                 <jbossHome>${project.build.directory}/wildfly-${version.wildfly}</jbossHome>
             </properties>

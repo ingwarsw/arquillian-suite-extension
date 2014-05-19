@@ -51,6 +51,9 @@ import org.jboss.arquillian.test.spi.context.ClassContext;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.jboss.arquillian.container.spi.event.StartContainer;
+import org.jboss.arquillian.container.spi.event.StopContainer;
+import org.jboss.arquillian.container.spi.event.container.BeforeKill;
 import org.reflections.Reflections;
 
 /**
@@ -129,7 +132,7 @@ public class ArquillianSuiteExtension implements LoadableExtension {
          * @param ignored Event to ignore
          */
         public void blockDeployManagedDeployments(@Observes EventContext<DeployManagedDeployments> ignored) {
-            // Do nothing with event.
+            LOG.log(Level.WARNING, "Blocking DeployManagedDeployments event");
         }
 
         /**
@@ -139,6 +142,7 @@ public class ArquillianSuiteExtension implements LoadableExtension {
          */
         public void blockSubsquentGenerateDeployment(@Observes EventContext<GenerateDeployment> eventContext) {
             if (suiteDeploymentGenerated) {
+                LOG.log(Level.WARNING, "Blocking GenerateDeployment event");
                 // Do nothing with event.
                 return;
             }
@@ -152,7 +156,7 @@ public class ArquillianSuiteExtension implements LoadableExtension {
          * @param ignored Event to ignore
          */
         public void blockUnDeployManagedDeployments(@Observes EventContext<UnDeployManagedDeployments> ignored) {
-            // Do nothing with event.
+            LOG.log(Level.WARNING, "Blocking UnDeployManagedDeployments event");
         }
 
         /**
@@ -216,6 +220,7 @@ public class ArquillianSuiteExtension implements LoadableExtension {
          * @param descriptor ArquillianDescriptor
          */
         public void startup(@Observes(precedence = -100) ArquillianDescriptor descriptor) {
+            LOG.log(Level.WARNING, "Catching ArquillianDescriptor event");
             executeInClassScope(new Callable<Void>() {
                 @Override
                 public Void call() {
@@ -249,6 +254,16 @@ public class ArquillianSuiteExtension implements LoadableExtension {
                     return null;
                 }
             });
+        }
+        
+        public void undeploy1(@Observes final org.jboss.arquillian.container.spi.event.container.ContainerEvent event) {
+            LOG.log(Level.WARNING, "Catching ContainerEvent event {0} {1}", event.toString());
+        }
+        public void undeploy2(@Observes final org.jboss.arquillian.container.spi.event.container.ContainerEvent event) {
+            LOG.log(Level.WARNING, "Catching ContainerEvent event {0} {1}", event.toString());
+        }
+        public void undeploy3(@Observes final org.jboss.arquillian.container.spi.event.DeploymentEvent event) {
+            LOG.log(Level.WARNING, "Catching DeploymentEvent event {0} {1}", event.toString());
         }
     }
 }

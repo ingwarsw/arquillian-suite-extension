@@ -20,6 +20,7 @@ package org.eu.ingwar.tools.arquillian.extension.suite.normal;
  * #L%
  */
 
+import org.eu.ingwar.tools.arquillian.extension.groups.AlphaGroup;
 import org.eu.ingwar.tools.arquillian.extension.suite.Deployments;
 import org.eu.ingwar.tools.arquillian.extension.suite.inject.InjectedObject;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
@@ -27,12 +28,14 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.experimental.categories.Category;
 
 @RunWith(Arquillian.class)
 public class Extension2Test extends Deployments {
 
     @Test
     @OperateOnDeployment("normal")
+    @Category(AlphaGroup.class)
     public void shouldInject(InjectedObject bm) {
         Assert.assertNotNull(bm);
         Assert.assertEquals(NormalInjectedObject.NAME, bm.getName());

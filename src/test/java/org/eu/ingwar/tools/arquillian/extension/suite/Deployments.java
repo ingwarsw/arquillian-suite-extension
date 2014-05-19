@@ -22,6 +22,7 @@ package org.eu.ingwar.tools.arquillian.extension.suite;
 
 import org.eu.ingwar.tools.arquillian.extension.deployment.EarGenericBuilder;
 import org.eu.ingwar.tools.arquillian.extension.deployment.ModuleType;
+import org.eu.ingwar.tools.arquillian.extension.groups.AlphaGroup;
 import org.eu.ingwar.tools.arquillian.extension.suite.normal.Extension1Test;
 import org.eu.ingwar.tools.arquillian.extension.suite.inject.InjectedObject;
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuiteDeployment;
@@ -42,6 +43,7 @@ public class Deployments {
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addClass(Deployments.class)
                 .addClass(InjectedObject.class)
+                .addPackage(AlphaGroup.class.getPackage())
                 .addPackage(Extension1Test.class.getPackage());
     }
     
@@ -51,6 +53,7 @@ public class Deployments {
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addClass(Deployments.class)
                 .addClass(InjectedObject.class)
+                .addPackage(AlphaGroup.class.getPackage())
                 .addPackage(ExtensionExtra1Test.class.getPackage());
         return ejb;
     }
