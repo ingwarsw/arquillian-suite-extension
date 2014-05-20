@@ -10,13 +10,13 @@
   
        http://www.apache.org/licenses/LICENSE-2.0
   
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
-  #L%
-  -->
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+#L%
+-->
 <arquillian xmlns="http://jboss.org/schema/arquillian"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:schemaLocation="http://jboss.org/schema/arquillian http://jboss.org/schema/arquillian/arquillian_1_0.xsd">
@@ -27,6 +27,24 @@
         <!-- Save deploument to target direstory -->
         <property name="deploymentExportPath">target/</property>    
     </engine>
-
+    
+    <!-- standalone configuration -->
+    <group qualifier="standalone" default="true">
+        <container qualifier="app">
+        </container>
+    </group>
+    
+    <!-- Domain configuration -->
+    <group qualifier="domain">
+        <container qualifier="DomainController">
+            <configuration>
+                <property name="containerNameMap">
+                    main-server-group=app,
+                </property>
+            </configuration>
+        </container>
+    </group>
+    
+        
     <defaultProtocol type="Servlet 3.0"/>
 </arquillian>

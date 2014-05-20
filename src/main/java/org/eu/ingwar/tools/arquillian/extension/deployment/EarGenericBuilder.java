@@ -103,7 +103,7 @@ public class EarGenericBuilder {
             // przejrzenie dependency oznaczonych jako provided w celu znalezienia EJB'ków
             MavenResolvedArtifact[] provided = resolveStage.importRuntimeDependencies().importDependencies(ScopeType.PROVIDED).resolve().withMavenCentralRepo(false).using(new AcceptScopesStrategy(ScopeType.PROVIDED)).asResolvedArtifact();
             for (MavenResolvedArtifact mra : provided) {
-                System.out.println("Checking provided: " + mra.getCoordinate().toCanonicalForm());
+//                System.out.println("Checking provided: " + mra.getCoordinate().toCanonicalForm());
                 if (isArtifactEjb(mra.getCoordinate())) {
                     ear.addAsModule(mra.as(JavaArchive.class));
                     // dodajemy jako moduł
@@ -132,7 +132,7 @@ public class EarGenericBuilder {
                 if (doFiltering && isFiltered(mc)) {
                     continue;
                 }
-                System.out.println("Adding: " + mc.toCanonicalForm());
+//                System.out.println("Adding: " + mc.toCanonicalForm());
                 if (isArtifactEjb(mc)) {
                     // dependency w postaci ejb'ków
                     ear.addAsModule(mra.as(JavaArchive.class));
@@ -163,7 +163,7 @@ public class EarGenericBuilder {
 //            mergeReplace(ear, module, testJar);
 
             module.add(new StringAsset(RUN_AT_ARQUILLIAN_CONTENT), RUN_AT_ARQUILLIAN_PATH);
-            System.out.println(module.toString(true));
+//            System.out.println(module.toString(true));
 
             addMainModule(ear, type, module, descriptorBuilder);
             
@@ -178,8 +178,8 @@ public class EarGenericBuilder {
             ear.addManifest();
 //            ear.addAsResource(ArtifactVersion.VERSION_FILE);
 //            LOG.debug("Created deployment [" + ear.getName() + "]");
-            System.out.println(ear.toString(true));
-            System.out.println(descriptorBuilder.render());
+//            System.out.println(ear.toString(true));
+//            System.out.println(descriptorBuilder.render());
             return ear;
         } catch (IllegalArgumentException ex) {
             throw new IllegalStateException("Błąd tworzenia deploymentu [" + ex + "]", ex);

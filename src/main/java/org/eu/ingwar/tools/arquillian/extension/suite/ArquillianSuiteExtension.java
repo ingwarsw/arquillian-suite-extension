@@ -23,10 +23,7 @@ import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ExtendedSuiteS
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuiteDeployment;
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquilianSuiteDeployment;
 import java.util.Set;
-import org.jboss.arquillian.config.descriptor.api.ArquillianDescriptor;
-import org.jboss.arquillian.container.spi.Container;
 import org.jboss.arquillian.container.spi.ContainerRegistry;
-import org.jboss.arquillian.container.spi.client.container.DeployableContainer;
 import org.jboss.arquillian.container.spi.client.deployment.Deployment;
 import org.jboss.arquillian.container.spi.client.deployment.DeploymentScenario;
 import org.jboss.arquillian.container.spi.event.DeployDeployment;
@@ -163,13 +160,13 @@ public class ArquillianSuiteExtension implements LoadableExtension {
          * @param event event to observe
          * @param registry ContainerRegistry
          */
-        public void deploy(@Observes final AfterStart event, final ContainerRegistry registry) {
+        public void deploy(@Observes(precedence = -200) final AfterStart event, final ContainerRegistry registry) {
             executeInClassScope(new Callable<Void>() {
                 @Override
                 public Void call() {
                     for (Deployment d : suiteDeploymentScenario.managedDeploymentsInDeployOrder()) {
-                        debug("DEPLOY: {0} prio {1}", new Object[]{ d.getDescription().getName(), d.getDescription().getOrder() });
-                        deploymentEvent.fire(new DeployDeployment(findContainer(registry, event.getDeployableContainer()), d));
+                        debug("DEPLOY: {0} prio {1}", d.getDescription().getName(), d.getDescription().getOrder());
+                        deploymentEvent.fire(new DeployDeployment(registry.getContainer(d.getDescription().getTarget()), d));
                     }
                     final ExtendedSuiteContext extendedSuiteContextLocal = SuiteDeployer.this.extendedSuiteContext.get();
                     if (!extendedSuiteContextLocal.isActive()) {
@@ -197,28 +194,12 @@ public class ArquillianSuiteExtension implements LoadableExtension {
         }
 
         /**
-         * Iterate in Registry to find ours container.
-         *
-         * @param registry registy to find container in
-         * @param deployable container to find
-         * @return found container
-         */
-        private Container findContainer(ContainerRegistry registry, DeployableContainer<?> deployable) {
-            for (Container container : registry.getContainers()) {
-                if (container.getDeployableContainer() == deployable) {
-                    return container;
-                }
-            }
-            return null;
-        }
-
-        /**
          * Startup event.
          *
          * @param descriptor ArquillianDescriptor
          */
-        public void startup(@Observes(precedence = -100) ArquillianDescriptor descriptor) {
-            debug("Catching ArquillianDescriptor event {}", descriptor.getDescriptorName());
+        public void startup(@Observes(precedence = -100) final AfterStart event) {
+            debug("Catching AfterStart event {}", event.toString());
             executeInClassScope(new Callable<Void>() {
                 @Override
                 public Void call() {
@@ -234,7 +215,7 @@ public class ArquillianSuiteExtension implements LoadableExtension {
             extendedSuiteContext.get().activate();
             suiteDeploymentScenarioInstanceProducer.set(suiteDeploymentScenario);
         }
-
+        
         /**
          * Undeploy event.
          *
@@ -247,28 +228,14 @@ public class ArquillianSuiteExtension implements LoadableExtension {
                 public Void call() {
                     for (Deployment d : suiteDeploymentScenario.deployedDeploymentsInUnDeployOrder()) {
                         debug("UNDEPLOY: {0}", d.getDescription().getName());
-                        deploymentEvent.fire(new UnDeployDeployment(findContainer(registry, event.getDeployableContainer()), d));
+                        deploymentEvent.fire(new UnDeployDeployment(registry.getContainer(d.getDescription().getTarget()), d));
                     }
                     return null;
                 }
             });
         }
-        
-        public void undeploy1(@Observes final org.jboss.arquillian.container.spi.event.container.ContainerEvent event) {
-            debug("Catching ContainerEvent event {0}", event.toString());
-        }
-        public void undeploy3(@Observes final org.jboss.arquillian.container.spi.event.DeploymentEvent event) {
-            debug("Catching DeploymentEvent event {0}", event.toString());
-        }
-        
-        private void debug(String format, Object message) {
-            if (ManagerImpl.DEBUG) {
-                LOG.log(Level.WARNING, format, message);
-            }
-        }
-                
-        
-        private void debug(String format, Object[] message) {
+
+        private void debug(String format, Object... message) {
             if (ManagerImpl.DEBUG) {
                 LOG.log(Level.WARNING, format, message);
             }
