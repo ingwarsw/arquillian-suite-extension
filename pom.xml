@@ -367,14 +367,41 @@
             <id>test-wildfly-managed</id>
             <properties>
                 <jbossHome>${project.build.directory}/wildfly-${version.wildfly}</jbossHome>
-                <unpack.groupId>org.jboss.as</unpack.groupId>
-                <unpack.artifactId>jboss-as-dist</unpack.artifactId>
-                <unpack.version>${version.jbossas}</unpack.version>
+                <unpack.groupId>org.wildfly</unpack.groupId>
+                <unpack.artifactId>wildfly-dist</unpack.artifactId>
+                <unpack.version>${version.wildfly}</unpack.version>
             </properties>
             <dependencies>
                 <dependency>
                     <groupId>org.wildfly</groupId>
                     <artifactId>wildfly-arquillian-container-managed</artifactId>
+                    <version>${version.wildfly}</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>test-wildfly-managed-domain</id>
+            <properties>
+                <jbossHome>${project.build.directory}/wildfly-${version.wildfly}</jbossHome>
+                <unpack.groupId>org.wildfly</unpack.groupId>
+                <unpack.artifactId>wildfly-dist</unpack.artifactId>
+                <unpack.version>${version.wildfly}</unpack.version>
+                <test.container>domain</test.container>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.wildfly</groupId>
+                    <artifactId>wildfly-arquillian-container-domain-managed</artifactId>
                     <version>${version.wildfly}</version>
                     <scope>test</scope>
                 </dependency>
