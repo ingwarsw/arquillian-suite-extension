@@ -12,9 +12,12 @@ Deploy will occur only once on first test witch require Arquillian.
 
 So far tested on:
 - Jboss 7.1, Jboss 7.2
+- EAP 6.1, EAP 6.2
 - Wildfly 8.0.0
 - Glassfish 3.2.2
 - Should work on other servers too
+
+From version 1.1.0 working with domain mode (see extended usage).
 
 # Basic Usage
 
@@ -81,11 +84,12 @@ Basic usage for EJB module looks like.
 ## Multi deployment
 
 As with normal arquillian you can define more than one deployment and then force tests to run on one of them.
+You can run them in order you like adding order attribute to @Dployment annotation.
 
     @ArquillianSuiteDeployment
     public class Deployments {
 
-        @Deployment(name = "normal")
+        @Deployment(name = "normal", order = 2)
         public static Archive<?> generateDefaultDeployment() {
             return ShrinkWrap.create(WebArchive.class, "normal.war")
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
@@ -94,7 +98,7 @@ As with normal arquillian you can define more than one deployment and then force
                 .addPackage(Extension1Test.class.getPackage());
         }
     
-        @Deployment(name = "extra")
+        @Deployment(name = "extra", order = 1)
         public static Archive<?> generateExtraDeployment() {
             Archive<?> ejb = ShrinkWrap.create(WebArchive.class, "extra_ejb.war")
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
@@ -118,6 +122,21 @@ Then at test methods you need to add annotation @OperateOnDeployment("name")
     public void testExtra() {
         // Test on extra deployment
     }
+
+## Domain deployment
+
+To use domaint to test classes you need to do few extra steps.
+
+Mark your deployment with @TargetsContainer("container-name")
+Change arquillian container to domain one.
+And add group for container in arquillian.xml
+
+    <group qualifier="domain">
+        <container qualifier="DomainController">
+        </container>
+    </group>
+
+All of that + extra switching betweeen standalone/domain is done in that project itself.
 
 # Extra info
 
