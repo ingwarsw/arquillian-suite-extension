@@ -57,9 +57,8 @@ import org.reflections.Reflections;
  * @author Karol Lassak 'Ingwar'
  */
 public class ArquillianSuiteExtension implements LoadableExtension {
-    
-    private static final Logger LOG = Logger.getLogger(ArquillianSuiteExtension.class.getName());
 
+    private static final Logger LOG = Logger.getLogger(ArquillianSuiteExtension.class.getName());
     private static Class<?> deploymentClass;
 
     /**
@@ -92,7 +91,7 @@ public class ArquillianSuiteExtension implements LoadableExtension {
         }
         if (results.size() > 1) {
             for (Class<?> type : results) {
-                LOG.log(Level. SEVERE, "arquillian-suite-deployment: Duplicated class annotated with @ArquillianSuiteDeployment: {0}", type.getName());
+                LOG.log(Level.SEVERE, "arquillian-suite-deployment: Duplicated class annotated with @ArquillianSuiteDeployment: {0}", type.getName());
             }
             throw new IllegalStateException("Duplicated classess annotated with @ArquillianSuiteDeployment");
         }
@@ -178,28 +177,12 @@ public class ArquillianSuiteExtension implements LoadableExtension {
         }
 
         /**
-         * Calls operation in deployment class scope.
-         *
-         * @param call Callable to call
-         */
-        private void executeInClassScope(Callable<Void> call) {
-            try {
-                classContext.get().activate(deploymentClass);
-                call.call();
-            } catch (Exception e) {
-                throw new RuntimeException("Could not invoke operation", e); // NOPMD
-            } finally {
-                classContext.get().deactivate();
-            }
-        }
-
-        /**
          * Startup event.
          *
-         * @param descriptor ArquillianDescriptor
+         * @param event AfterStart event to catch
          */
         public void startup(@Observes(precedence = -100) final AfterStart event) {
-            debug("Catching AfterStart event {}", event.toString());
+            debug("Catching AfterStart event {0}", event.toString());
             executeInClassScope(new Callable<Void>() {
                 @Override
                 public Void call() {
@@ -215,7 +198,7 @@ public class ArquillianSuiteExtension implements LoadableExtension {
             extendedSuiteContext.get().activate();
             suiteDeploymentScenarioInstanceProducer.set(suiteDeploymentScenario);
         }
-        
+
         /**
          * Undeploy event.
          *
@@ -235,6 +218,30 @@ public class ArquillianSuiteExtension implements LoadableExtension {
             });
         }
 
+        /**
+         * Calls operation in deployment class scope.
+         *
+         * @param call Callable to call
+         */
+        private void executeInClassScope(Callable<Void> call) {
+            try {
+                classContext.get().activate(deploymentClass);
+                call.call();
+            } catch (Exception e) {
+                throw new RuntimeException("Could not invoke operation", e); // NOPMD
+            } finally {
+                classContext.get().deactivate();
+            }
+        }
+
+        /**
+         * Prints debug message.
+         *
+         * Id arquillian.debug flag is set.
+         *
+         * @param format format of message
+         * @param message message objects to format
+         */
         private void debug(String format, Object... message) {
             if (ManagerImpl.DEBUG) {
                 LOG.log(Level.WARNING, format, message);
