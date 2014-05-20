@@ -51,9 +51,6 @@ import org.jboss.arquillian.test.spi.context.ClassContext;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.jboss.arquillian.container.spi.event.StartContainer;
-import org.jboss.arquillian.container.spi.event.StopContainer;
-import org.jboss.arquillian.container.spi.event.container.BeforeKill;
 import org.reflections.Reflections;
 
 /**
@@ -257,13 +254,10 @@ public class ArquillianSuiteExtension implements LoadableExtension {
         }
         
         public void undeploy1(@Observes final org.jboss.arquillian.container.spi.event.container.ContainerEvent event) {
-            LOG.log(Level.WARNING, "Catching ContainerEvent event {0} {1}", event.toString());
-        }
-        public void undeploy2(@Observes final org.jboss.arquillian.container.spi.event.container.ContainerEvent event) {
-            LOG.log(Level.WARNING, "Catching ContainerEvent event {0} {1}", event.toString());
+            LOG.log(Level.WARNING, "Catching ContainerEvent event {0}", event.toString());
         }
         public void undeploy3(@Observes final org.jboss.arquillian.container.spi.event.DeploymentEvent event) {
-            LOG.log(Level.WARNING, "Catching DeploymentEvent event {0} {1}", event.toString());
+            LOG.log(Level.WARNING, "Catching DeploymentEvent event {0}", event.toString());
         }
     }
 }
