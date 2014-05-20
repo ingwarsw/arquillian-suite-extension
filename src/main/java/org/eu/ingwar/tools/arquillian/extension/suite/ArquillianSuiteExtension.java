@@ -74,7 +74,7 @@ public class ArquillianSuiteExtension implements LoadableExtension {
         if (deploymentClass != null) {
             builder.observer(SuiteDeployer.class).context(ExtendedSuiteContextImpl.class);
         } else {
-            LOG.severe("WARNING: arquillian-suite-deployment: Cannot find class annotated with @ArquillianSuiteDeployment, will try normal way..");
+            LOG.log(Level.WARNING, "arquillian-suite-deployment: Cannot find class annotated with @ArquillianSuiteDeployment, will try normal way..");
         }
     }
 
@@ -95,7 +95,7 @@ public class ArquillianSuiteExtension implements LoadableExtension {
         }
         if (results.size() > 1) {
             for (Class<?> type : results) {
-                LOG.log(Level. SEVERE, "ERROR: arquillian-suite-deployment: Duplicated class annotated with @ArquillianSuiteDeployment: {0}", type.getName());
+                LOG.log(Level. SEVERE, "arquillian-suite-deployment: Duplicated class annotated with @ArquillianSuiteDeployment: {0}", type.getName());
             }
             throw new IllegalStateException("Duplicated classess annotated with @ArquillianSuiteDeployment");
         }
