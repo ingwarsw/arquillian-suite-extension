@@ -51,6 +51,7 @@ import org.jboss.arquillian.test.spi.context.ClassContext;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.jboss.arquillian.core.impl.ManagerImpl;
 import org.reflections.Reflections;
 
 /**
@@ -129,7 +130,7 @@ public class ArquillianSuiteExtension implements LoadableExtension {
          * @param ignored Event to ignore
          */
         public void blockDeployManagedDeployments(@Observes EventContext<DeployManagedDeployments> ignored) {
-            LOG.log(Level.WARNING, "Blocking DeployManagedDeployments event");
+            debug("Blocking DeployManagedDeployments event {}", ignored.getEvent().toString());
         }
 
         /**
@@ -139,7 +140,7 @@ public class ArquillianSuiteExtension implements LoadableExtension {
          */
         public void blockSubsquentGenerateDeployment(@Observes EventContext<GenerateDeployment> eventContext) {
             if (suiteDeploymentGenerated) {
-                LOG.log(Level.WARNING, "Blocking GenerateDeployment event");
+                debug("Blocking GenerateDeployment event {}", eventContext.getEvent().toString());
                 // Do nothing with event.
                 return;
             }
@@ -153,7 +154,7 @@ public class ArquillianSuiteExtension implements LoadableExtension {
          * @param ignored Event to ignore
          */
         public void blockUnDeployManagedDeployments(@Observes EventContext<UnDeployManagedDeployments> ignored) {
-            LOG.log(Level.WARNING, "Blocking UnDeployManagedDeployments event");
+            debug("Blocking UnDeployManagedDeployments event {}", ignored.getEvent().toString());
         }
 
         /**
@@ -167,7 +168,7 @@ public class ArquillianSuiteExtension implements LoadableExtension {
                 @Override
                 public Void call() {
                     for (Deployment d : suiteDeploymentScenario.managedDeploymentsInDeployOrder()) {
-                        LOG.log(Level.FINER, "DEPLOY: {0} prio {1}", new Object[]{ d.getDescription().getName(), d.getDescription().getOrder() });
+                        debug("DEPLOY: {0} prio {1}", new Object[]{ d.getDescription().getName(), d.getDescription().getOrder() });
                         deploymentEvent.fire(new DeployDeployment(findContainer(registry, event.getDeployableContainer()), d));
                     }
                     final ExtendedSuiteContext extendedSuiteContextLocal = SuiteDeployer.this.extendedSuiteContext.get();
@@ -217,7 +218,7 @@ public class ArquillianSuiteExtension implements LoadableExtension {
          * @param descriptor ArquillianDescriptor
          */
         public void startup(@Observes(precedence = -100) ArquillianDescriptor descriptor) {
-            LOG.log(Level.WARNING, "Catching ArquillianDescriptor event");
+            debug("Catching ArquillianDescriptor event {}", descriptor.getDescriptorName());
             executeInClassScope(new Callable<Void>() {
                 @Override
                 public Void call() {
@@ -245,7 +246,7 @@ public class ArquillianSuiteExtension implements LoadableExtension {
                 @Override
                 public Void call() {
                     for (Deployment d : suiteDeploymentScenario.deployedDeploymentsInUnDeployOrder()) {
-                        LOG.log(Level.FINER, "UNDEPLOY: {0}", d.getDescription().getName());
+                        debug("UNDEPLOY: {0}", d.getDescription().getName());
                         deploymentEvent.fire(new UnDeployDeployment(findContainer(registry, event.getDeployableContainer()), d));
                     }
                     return null;
@@ -254,10 +255,23 @@ public class ArquillianSuiteExtension implements LoadableExtension {
         }
         
         public void undeploy1(@Observes final org.jboss.arquillian.container.spi.event.container.ContainerEvent event) {
-            LOG.log(Level.WARNING, "Catching ContainerEvent event {0}", event.toString());
+            debug("Catching ContainerEvent event {0}", event.toString());
         }
         public void undeploy3(@Observes final org.jboss.arquillian.container.spi.event.DeploymentEvent event) {
-            LOG.log(Level.WARNING, "Catching DeploymentEvent event {0}", event.toString());
+            debug("Catching DeploymentEvent event {0}", event.toString());
+        }
+        
+        private void debug(String format, Object message) {
+            if (ManagerImpl.DEBUG) {
+                LOG.log(Level.WARNING, format, message);
+            }
+        }
+                
+        
+        private void debug(String format, Object[] message) {
+            if (ManagerImpl.DEBUG) {
+                LOG.log(Level.WARNING, format, message);
+            }
         }
     }
 }
