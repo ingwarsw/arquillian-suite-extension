@@ -20,6 +20,8 @@ package org.eu.ingwar.tools.arquillian.extension.deployment;
  * #L%
  */
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ArchivePath;
 import org.jboss.shrinkwrap.api.Node;
@@ -35,6 +37,7 @@ import org.jboss.shrinkwrap.impl.base.filter.ExcludeRegExpPaths;
 import org.jboss.shrinkwrap.impl.base.filter.IncludeRegExpPaths;
 import org.jboss.shrinkwrap.impl.base.path.BasicPath;
 import org.jboss.shrinkwrap.resolver.api.InvalidConfigurationFileException;
+import org.jboss.shrinkwrap.resolver.api.maven.ConfigurableMavenResolverSystem;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.jboss.shrinkwrap.resolver.api.maven.MavenArtifactInfo;
 import org.jboss.shrinkwrap.resolver.api.maven.MavenResolvedArtifact;
@@ -54,6 +57,7 @@ public class EarGenericBuilder {
 
     private static final String RUN_AT_ARQUILLIAN_PATH = "/runs-at-arquillian.txt";
     private static final String RUN_AT_ARQUILLIAN_CONTENT = "at-arquillian";
+    private static final Logger LOG = Logger.getLogger(EarGenericBuilder.class.getName());
 
     /**
      * Private constructor.
@@ -97,11 +101,12 @@ public class EarGenericBuilder {
         try {
             EarDescriptorBuilder descriptorBuilder = new EarDescriptorBuilder(basename);
             MavenResolverSystem maven = Maven.resolver();
+            //ConfigurableMavenResolverSystem maven = Maven.configureResolver().workOffline().withMavenCentralRepo(false);
             EnterpriseArchive ear = ShrinkWrap.create(EnterpriseArchive.class, basename + "-full.ear");
-            PomEquippedResolveStage resolveStage = maven.offline().loadPomFromFile("pom.xml");
+            PomEquippedResolveStage resolveStage = maven.loadPomFromFile("pom.xml");
 
             // przejrzenie dependency oznaczonych jako provided w celu znalezienia EJB'ków
-            MavenResolvedArtifact[] provided = resolveStage.importRuntimeDependencies().importDependencies(ScopeType.PROVIDED).resolve().withMavenCentralRepo(false).using(new AcceptScopesStrategy(ScopeType.PROVIDED)).asResolvedArtifact();
+            MavenResolvedArtifact[] provided = resolveStage.importRuntimeDependencies().importDependencies(ScopeType.PROVIDED).resolve().using(new AcceptScopesStrategy(ScopeType.PROVIDED)).asResolvedArtifact();
             for (MavenResolvedArtifact mra : provided) {
 //                System.out.println("Checking provided: " + mra.getCoordinate().toCanonicalForm());
                 if (isArtifactEjb(mra.getCoordinate())) {
@@ -124,7 +129,7 @@ public class EarGenericBuilder {
                     }
                 }
             }
-            MavenResolvedArtifact[] deps = resolveStage.importRuntimeAndTestDependencies().resolve().withMavenCentralRepo(false).withTransitivity().asResolvedArtifact();
+            MavenResolvedArtifact[] deps = resolveStage.importRuntimeAndTestDependencies().resolve().withTransitivity().asResolvedArtifact();
 
             for (MavenResolvedArtifact mra : deps) {
                 MavenCoordinate mc = mra.getCoordinate();
@@ -132,7 +137,7 @@ public class EarGenericBuilder {
                 if (doFiltering && isFiltered(mc)) {
                     continue;
                 }
-//                System.out.println("Adding: " + mc.toCanonicalForm());
+                LOG.log(Level.FINEST, "Adding: {0}", mc.toCanonicalForm());
                 if (isArtifactEjb(mc)) {
                     // dependency w postaci ejb'ków
                     ear.addAsModule(mra.as(JavaArchive.class));
@@ -163,7 +168,7 @@ public class EarGenericBuilder {
 //            mergeReplace(ear, module, testJar);
 
             module.add(new StringAsset(RUN_AT_ARQUILLIAN_CONTENT), RUN_AT_ARQUILLIAN_PATH);
-//            System.out.println(module.toString(true));
+            LOG.log(Level.FINE, module.toString(true));
 
             addMainModule(ear, type, module, descriptorBuilder);
             
@@ -176,17 +181,16 @@ public class EarGenericBuilder {
 
             ear.setApplicationXML(new StringAsset(descriptorBuilder.render()));
             ear.addManifest();
-//            ear.addAsResource(ArtifactVersion.VERSION_FILE);
-//            LOG.debug("Created deployment [" + ear.getName() + "]");
+            LOG.log(Level.INFO, "Created deployment [{0}]", ear.getName());
 //            System.out.println(ear.toString(true));
 //            System.out.println(descriptorBuilder.render());
             return ear;
         } catch (IllegalArgumentException ex) {
-            throw new IllegalStateException("Błąd tworzenia deploymentu [" + ex + "]", ex);
+            throw new IllegalStateException("Error in creating deployment [" + ex + "]", ex);
         } catch (InvalidConfigurationFileException ex) {
-            throw new IllegalStateException("Błąd tworzenia deploymentu [" + ex + "]", ex);
+            throw new IllegalStateException("Error in creating deployment [" + ex + "]", ex);
         } catch (ArchiveImportException ex) {
-            throw new IllegalStateException("Błąd tworzenia deploymentu [" + ex + "]", ex);
+            throw new IllegalStateException("Error in creating deployment [" + ex + "]", ex);
         }
     }
 
@@ -269,6 +273,9 @@ public class EarGenericBuilder {
             return true;
         }
         if (artifactCoordinate.getGroupId().startsWith("org.jboss.arquillian")) {
+            return true;
+        }
+        if (artifactCoordinate.getGroupId().startsWith("org.jboss.as")) {
             return true;
         }
         return false;
