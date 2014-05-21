@@ -26,7 +26,7 @@ Add module to test classpath.
     <dependency>
         <groupId>org.eu.ingwar.tools</groupId>
         <artifactId>arquillian-suite-extension</artifactId>
-        <version>1.0.8</version>
+        <version>1.1.0</version>
         <scope>test</scope>
     </dependency>
 
@@ -126,10 +126,9 @@ Then at test methods you need to add annotation @OperateOnDeployment("name")
 ## Domain deployment
 
 To use domaint to test classes you need to do few extra steps.
-
-Mark your deployment with @TargetsContainer("container-name")
-Change arquillian container to domain one.
-And add group for container in arquillian.xml
+- Mark your deployment with @TargetsContainer("container-name")
+- Change arquillian container to domain one.
+- And add group for container in arquillian.xml
 
     <group qualifier="domain">
         <container qualifier="DomainController">
