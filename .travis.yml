@@ -21,15 +21,12 @@ matrix:
     allow_failures:
         - env: "PROFILE=test-glassfish-embeded"
     exclude:
-# Since current version of jacoco is not working with java8 lets skip it 
-        - jdk: oraclejdk8
-          env: "PROFILE=test-jboss-managed,coveralls-coverage"
-# Skip wildfly on java 6, not working neither
+# Skip wildfly on java 6, not working
         - jdk: openjdk6
           env: "PROFILE=test-wildfly-managed"
         - jdk: openjdk6
           env: "PROFILE=test-wildfly-managed-domain"
-# Skip jbooss on java 8, not working neither
+# Skip jbooss on java 8, not working
         - jdk: oraclejdk8
           env: "PROFILE=test-jboss-managed"
         - jdk: oraclejdk8
@@ -38,15 +35,8 @@ matrix:
         - jdk: oraclejdk7
           env: "PROFILE=test-jboss-managed,coveralls-coverage"
 
-install: true
-
-before_script:
-# Try download all stuff
-  - mvn test -P${PROFILE} -DskipTests || true
-# try harder
-  - mvn test -P${PROFILE} -DskipTests || true
-# --force
-  - mvn test -P${PROFILE} -DskipTests || true
+# Try downloading all stuff || try harder || try --force
+install: mvn test -P${PROFILE} -DskipTests || mvn test -P${PROFILE} -DskipTests || mvn test -P${PROFILE} -DskipTests
 
 script: mvn test -P${PROFILE}
 
