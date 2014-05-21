@@ -38,13 +38,15 @@ matrix:
         - jdk: oraclejdk7
           env: "PROFILE=test-jboss-managed,coveralls-coverage"
 
+install: true
+
 before_script:
 # Try download all stuff
-  - mvn test -P${PROFILE} -DskipTests || 1
+  - mvn test -P${PROFILE} -DskipTests || true
 # try harder
-  - mvn test -P${PROFILE} -DskipTests || 1
+  - mvn test -P${PROFILE} -DskipTests || true
 # --force
-  - mvn test -P${PROFILE} -DskipTests || 1
+  - mvn test -P${PROFILE} -DskipTests || true
 
 script: mvn test -P${PROFILE}
 
