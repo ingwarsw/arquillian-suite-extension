@@ -12,7 +12,9 @@ env:
     - secure: "Lqi30fOkp2QgSTxLDWlPW1ArSva/mWHW5yjTalw1Pk/v7LTEHA4LfcOEMKJ/RfH3gKvpq0UP90Nb8t4cAooM1AkHKLb/5lOv8eys4Qj3XyeJcmDLJz8Znre0r6SWA8/DFMzugjPu++4ul+CQOFB8/DkCeA3hDVRuI4yHYKVwArM="
   matrix:
     - PROFILE=test-jboss-managed
+    - PROFILE=test-jboss-managed-domain
     - PROFILE=test-wildfly-managed
+    - PROFILE=test-wildfly-managed-domain
     - PROFILE=test-glassfish-embeded
 
 matrix:
@@ -20,6 +22,7 @@ matrix:
         - env: "PROFILE=test-glassfish-embeded"
         - jdk: oraclejdk8
           env: "PROFILE=test-jboss-managed"
+          env: "PROFILE=test-jboss-managed-domain"
     exclude:
 # Since current version of jacoco is not working with java8 lets skip it 
         - jdk: oraclejdk8
@@ -27,6 +30,7 @@ matrix:
 # Skip wildfly on java 6, not working neither
         - jdk: openjdk6
           env: "PROFILE=test-wildfly-managed"
+          env: "PROFILE=test-wildfly-managed-domain"
     include:
         - jdk: oraclejdk7
           env: "PROFILE=test-jboss-managed,coveralls-coverage"
