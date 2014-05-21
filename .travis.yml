@@ -35,7 +35,7 @@ matrix:
         - jdk: oraclejdk7
           env: "PROFILE=test-jboss-managed,coveralls-coverage"
 
-script: mvn install -P${PROFILE}
+script: mvn install -Dmaven.wagon.provider.http=httpclient -Dhttp.connection.timeout=60000 -P${PROFILE}
 
 after_success:
   - "[[ $TRAVIS_BRANCH == \"master\" ]] && { python travis/addServer.py; mvn clean deploy -DskipTests --settings ~/.m2/mySettings.xml; };"
