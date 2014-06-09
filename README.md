@@ -125,7 +125,7 @@ Then at test methods you need to add annotation @OperateOnDeployment("name")
 
 ## Domain deployment
 
-To use domaint to test classes you need to do few extra steps.
+To use domain to test classes you need to do few extra steps.
 - Mark your deployment with @TargetsContainer("container-name")
 - Change arquillian container to domain one.
 - And add group for container in arquillian.xml
