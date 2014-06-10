@@ -123,9 +123,9 @@ public class ArquillianSuiteExtension implements LoadableExtension {
          */
         public void blockDeployManagedDeploymentsWhenNeeded(@Observes EventContext<DeployManagedDeployments> eventContext) {
             if (deployDeployments) {
+                deployDeployments = false;
                 debug("NOT Blocking DeployManagedDeployments event {}", eventContext.getEvent().toString());
                 eventContext.proceed();
-                deployDeployments = false;
             } else {
                 // Do nothing with event.
                 debug("Blocking DeployManagedDeployments event {}", eventContext.getEvent().toString());
@@ -142,9 +142,9 @@ public class ArquillianSuiteExtension implements LoadableExtension {
                 // Do nothing with event.
                 debug("Blocking GenerateDeployment event {}", eventContext.getEvent().toString());
             } else {
+                suiteDeploymentGenerated = true;
                 debug("NOT Blocking GenerateDeployment event {}", eventContext.getEvent().toString());
                 eventContext.proceed();
-                suiteDeploymentGenerated = true;
             }
         }
 
@@ -157,9 +157,9 @@ public class ArquillianSuiteExtension implements LoadableExtension {
          */
         public void blockUnDeployManagedDeploymentsWhenNeeded(@Observes EventContext<UnDeployManagedDeployments> eventContext) {
             if (undeployDeployments) {
+                undeployDeployments = false;
                 debug("NOT Blocking UnDeployManagedDeployments event {}", eventContext.getEvent().toString());
                 eventContext.proceed();
-                undeployDeployments = false;
             } else {
                 // Do nothing with event.
                 debug("Blocking UnDeployManagedDeployments event {}", eventContext.getEvent().toString());
