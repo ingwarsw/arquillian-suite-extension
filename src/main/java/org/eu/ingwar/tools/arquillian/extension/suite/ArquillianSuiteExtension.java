@@ -23,13 +23,8 @@ import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ExtendedSuiteS
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuiteDeployment;
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquilianSuiteDeployment;
 import java.util.Set;
-import org.jboss.arquillian.container.spi.ContainerRegistry;
-import org.jboss.arquillian.container.spi.client.deployment.Deployment;
 import org.jboss.arquillian.container.spi.client.deployment.DeploymentScenario;
-import org.jboss.arquillian.container.spi.event.DeployDeployment;
 import org.jboss.arquillian.container.spi.event.DeployManagedDeployments;
-import org.jboss.arquillian.container.spi.event.DeploymentEvent;
-import org.jboss.arquillian.container.spi.event.UnDeployDeployment;
 import org.jboss.arquillian.container.spi.event.UnDeployManagedDeployments;
 import org.jboss.arquillian.container.spi.event.container.AfterStart;
 import org.jboss.arquillian.container.spi.event.container.BeforeStop;
@@ -44,7 +39,6 @@ import org.jboss.arquillian.core.spi.LoadableExtension;
 import org.jboss.arquillian.test.spi.TestClass;
 import org.jboss.arquillian.test.spi.annotation.ClassScoped;
 import org.jboss.arquillian.test.spi.context.ClassContext;
-
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -58,7 +52,7 @@ import org.reflections.Reflections;
  */
 public class ArquillianSuiteExtension implements LoadableExtension {
 
-    private static final Logger LOG = Logger.getLogger(ArquillianSuiteExtension.class.getName());
+    private static final Logger log = Logger.getLogger(ArquillianSuiteExtension.class.getName());
     private static Class<?> deploymentClass;
 
     /**
@@ -70,7 +64,7 @@ public class ArquillianSuiteExtension implements LoadableExtension {
         if (deploymentClass != null) {
             builder.observer(SuiteDeployer.class).context(ExtendedSuiteContextImpl.class);
         } else {
-            LOG.log(Level.WARNING, "arquillian-suite-deployment: Cannot find class annotated with @ArquillianSuiteDeployment, will try normal way..");
+            log.log(Level.WARNING, "arquillian-suite-deployment: Cannot find class annotated with @ArquillianSuiteDeployment, will try normal way..");
         }
     }
 
@@ -91,7 +85,7 @@ public class ArquillianSuiteExtension implements LoadableExtension {
         }
         if (results.size() > 1) {
             for (Class<?> type : results) {
-                LOG.log(Level.SEVERE, "arquillian-suite-deployment: Duplicated class annotated with @ArquillianSuiteDeployment: {0}", type.getName());
+                log.log(Level.SEVERE, "arquillian-suite-deployment: Duplicated class annotated with @ArquillianSuiteDeployment: {0}", type.getName());
             }
             throw new IllegalStateException("Duplicated classess annotated with @ArquillianSuiteDeployment");
         }
@@ -109,24 +103,33 @@ public class ArquillianSuiteExtension implements LoadableExtension {
         @ClassScoped
         private InstanceProducer<DeploymentScenario> classDeploymentScenario;
         @Inject
-        private Event<DeploymentEvent> deploymentEvent;
-        @Inject
-        private Instance<ExtendedSuiteContext> extendedSuiteContext;
+        private Event<UnDeployManagedDeployments> undeployEvent;
         @Inject
         private Event<GenerateDeployment> generateDeploymentEvent;
-        private boolean suiteDeploymentGenerated;
+        @Inject
+        private Instance<ExtendedSuiteContext> extendedSuiteContext;
         private DeploymentScenario suiteDeploymentScenario;
         @ExtendedSuiteScoped
         @Inject
         private InstanceProducer<DeploymentScenario> suiteDeploymentScenarioInstanceProducer;
+        private boolean suiteDeploymentGenerated;
+        private boolean deployDeployments;
+        private boolean undeployDeployments;
 
         /**
-         * Method ignoring DeployManagedDeployments events.
+         * Method ignoring DeployManagedDeployments events if already deployed.
          *
          * @param ignored Event to ignore
          */
-        public void blockDeployManagedDeployments(@Observes EventContext<DeployManagedDeployments> ignored) {
-            debug("Blocking DeployManagedDeployments event {}", ignored.getEvent().toString());
+        public void blockDeployManagedDeploymentsWhenNeeded(@Observes EventContext<DeployManagedDeployments> eventContext) {
+            if (deployDeployments) {
+                debug("NOT Blocking DeployManagedDeployments event {}", eventContext.getEvent().toString());
+                eventContext.proceed();
+                deployDeployments = false;
+            } else {
+                // Do nothing with event.
+                debug("Blocking DeployManagedDeployments event {}", eventContext.getEvent().toString());
+            }
         }
 
         /**
@@ -134,46 +137,33 @@ public class ArquillianSuiteExtension implements LoadableExtension {
          *
          * @param eventContext Event to ignore or fire.
          */
-        public void blockSubsquentGenerateDeployment(@Observes EventContext<GenerateDeployment> eventContext) {
+        public void blockGenerateDeploymentWhenNeeded(@Observes EventContext<GenerateDeployment> eventContext) {
             if (suiteDeploymentGenerated) {
-                debug("Blocking GenerateDeployment event {}", eventContext.getEvent().toString());
                 // Do nothing with event.
-                return;
+                debug("Blocking GenerateDeployment event {}", eventContext.getEvent().toString());
+            } else {
+                debug("NOT Blocking GenerateDeployment event {}", eventContext.getEvent().toString());
+                eventContext.proceed();
+                suiteDeploymentGenerated = true;
             }
-            eventContext.proceed();
-            suiteDeploymentGenerated = true;
         }
 
         /**
-         * Method ignoring UnDeployManagedDeployments events.
+         * Method ignoring UnDeployManagedDeployments events at runtime.
+         *
+         * Only at undeploy container we will undeploy all.
          *
          * @param ignored Event to ignore
          */
-        public void blockUnDeployManagedDeployments(@Observes EventContext<UnDeployManagedDeployments> ignored) {
-            debug("Blocking UnDeployManagedDeployments event {}", ignored.getEvent().toString());
-        }
-
-        /**
-         * Deploy event.
-         *
-         * @param event event to observe
-         * @param registry ContainerRegistry
-         */
-        public void deploy(@Observes(precedence = -200) final AfterStart event, final ContainerRegistry registry) {
-            executeInClassScope(new Callable<Void>() {
-                @Override
-                public Void call() {
-                    for (Deployment d : suiteDeploymentScenario.managedDeploymentsInDeployOrder()) {
-                        debug("DEPLOY: {0} prio {1}", d.getDescription().getName(), d.getDescription().getOrder());
-                        deploymentEvent.fire(new DeployDeployment(registry.getContainer(d.getDescription().getTarget()), d));
-                    }
-                    final ExtendedSuiteContext extendedSuiteContextLocal = SuiteDeployer.this.extendedSuiteContext.get();
-                    if (!extendedSuiteContextLocal.isActive()) {
-                        extendedSuiteContextLocal.deactivate();
-                    }
-                    return null;
-                }
-            });
+        public void blockUnDeployManagedDeploymentsWhenNeeded(@Observes EventContext<UnDeployManagedDeployments> eventContext) {
+            if (undeployDeployments) {
+                debug("NOT Blocking UnDeployManagedDeployments event {}", eventContext.getEvent().toString());
+                eventContext.proceed();
+                undeployDeployments = false;
+            } else {
+                // Do nothing with event.
+                debug("Blocking UnDeployManagedDeployments event {}", eventContext.getEvent().toString());
+            }
         }
 
         /**
@@ -186,15 +176,12 @@ public class ArquillianSuiteExtension implements LoadableExtension {
             executeInClassScope(new Callable<Void>() {
                 @Override
                 public Void call() {
-                    try {
-                        generateDeploymentEvent.fire(new GenerateDeployment(new TestClass(deploymentClass)));
-                        suiteDeploymentScenario = classDeploymentScenario.get();
-                    } catch (Exception ex) {
-                        ex.printStackTrace(); // NOPMD
-                    }
+                    generateDeploymentEvent.fire(new GenerateDeployment(new TestClass(deploymentClass)));
+                    suiteDeploymentScenario = classDeploymentScenario.get();
                     return null;
                 }
             });
+            deployDeployments = true;
             extendedSuiteContext.get().activate();
             suiteDeploymentScenarioInstanceProducer.set(suiteDeploymentScenario);
         }
@@ -203,19 +190,11 @@ public class ArquillianSuiteExtension implements LoadableExtension {
          * Undeploy event.
          *
          * @param event event to observe
-         * @param registry ContainerRegistry
          */
-        public void undeploy(@Observes final BeforeStop event, final ContainerRegistry registry) {
-            executeInClassScope(new Callable<Void>() {
-                @Override
-                public Void call() {
-                    for (Deployment d : suiteDeploymentScenario.deployedDeploymentsInUnDeployOrder()) {
-                        debug("UNDEPLOY: {0}", d.getDescription().getName());
-                        deploymentEvent.fire(new UnDeployDeployment(registry.getContainer(d.getDescription().getTarget()), d));
-                    }
-                    return null;
-                }
-            });
+        public void undeploy(@Observes final BeforeStop event) {
+            debug("Catching BeforeStop event {0}", event.toString());
+            undeployDeployments = true;
+            undeployEvent.fire(new UnDeployManagedDeployments());
         }
 
         /**
@@ -244,7 +223,7 @@ public class ArquillianSuiteExtension implements LoadableExtension {
          */
         private void debug(String format, Object... message) {
             if (ManagerImpl.DEBUG) {
-                LOG.log(Level.WARNING, format, message);
+                log.log(Level.WARNING, format, message);
             }
         }
     }
