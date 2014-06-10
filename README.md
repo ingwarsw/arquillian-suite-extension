@@ -26,7 +26,7 @@ Add module to test classpath.
     <dependency>
         <groupId>org.eu.ingwar.tools</groupId>
         <artifactId>arquillian-suite-extension</artifactId>
-        <version>1.1.0</version>
+        <version>1.1.1</version>
         <scope>test</scope>
     </dependency>
 
