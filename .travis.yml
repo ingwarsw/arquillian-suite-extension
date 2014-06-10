@@ -36,7 +36,7 @@ matrix:
           env: "PROFILE=test-jboss-managed,coveralls-coverage"
 
 # Try downloading all stuff || try harder || try --force
-install: mvn test -P${PROFILE} -DskipTests || mvn test -P${PROFILE} -DskipTests || mvn test -P${PROFILE} -DskipTests
+install: mvn test -P${PROFILE} -DskipTests || mvn test -P${PROFILE} -DskipTests || mvn test -P${PROFILE} -DskipTests || mvn test -P${PROFILE} -DskipTests || mvn test -P${PROFILE} -DskipTests || mvn test -P${PROFILE} -DskipTests
 
 script: mvn test -P${PROFILE}
 
