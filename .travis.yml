@@ -46,5 +46,5 @@ install: $INSTALL_COMMAND || $INSTALL_COMMAND || $INSTALL_COMMAND || $INSTALL_CO
 script: $SCRIPT_COMMAND
 
 after_success:
-  - "[[ $TRAVIS_BRANCH == 'master' && SONATYPE_SNAPSHOT == 'true' ]] && { python travis/addServer.py; mvn deploy -P${PROFILE} -DskipTests --settings ~/.m2/mySettings.xml; };"
+  - "[[ $TRAVIS_BRANCH == 'master' && $SONATYPE_SNAPSHOT == 'true' ]] && { python travis/addServer.py; mvn deploy -P${PROFILE} -DskipTests --settings ~/.m2/mySettings.xml; };"
 
