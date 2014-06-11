@@ -36,8 +36,9 @@ matrix:
           env: "PROFILE=test-jboss-managed,coveralls-coverage SONATYPE_SNAPSHOT=true"
 
 before_install:
-  - export SCRIPT_COMMAND="mvn test -P${PROFILE} -T2C"
+  - export SCRIPT_COMMAND="mvn test -P${PROFILE} -T4"
   - export INSTALL_COMMAND="$SCRIPT_COMMAND -DskipTests"
+  - echo "'SCRIPT_COMMAND=$SCRIPT_COMMAND' INSTALL_COMMAND='$INSTALL_COMMAND'"
 
 # Try downloading all stuff || try harder || try --force
 install: $INSTALL_COMMAND || $INSTALL_COMMAND || $INSTALL_COMMAND || $INSTALL_COMMAND || $INSTALL_COMMAND 
