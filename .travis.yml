@@ -36,7 +36,8 @@ matrix:
           env: "PROFILE=test-jboss-managed,coveralls-coverage SONATYPE_SNAPSHOT=true"
 
 before_install:
-  - export SCRIPT_COMMAND="mvn test -P${PROFILE} -T4"
+  - export MAVEN_OPTS='-Dmaven.artifact.threads=10 -T4'
+  - export SCRIPT_COMMAND="mvn test -P${PROFILE}"
   - export INSTALL_COMMAND="$SCRIPT_COMMAND -DskipTests"
   - echo "'SCRIPT_COMMAND=$SCRIPT_COMMAND' INSTALL_COMMAND='$INSTALL_COMMAND'"
 
@@ -46,5 +47,5 @@ install: $INSTALL_COMMAND || $INSTALL_COMMAND || $INSTALL_COMMAND || $INSTALL_CO
 script: $SCRIPT_COMMAND
 
 after_success:
-  - "[[ $TRAVIS_BRANCH == 'master' && $SONATYPE_SNAPSHOT == 'true' ]] && { python travis/addServer.py; mvn deploy -P${PROFILE} -DskipTests --settings ~/.m2/mySettings.xml; };"
+  - "[[ $SONATYPE_SNAPSHOT == 'true' ]] && { python travis/addServer.py; $INSTALL_COMMAND deploy --settings ~/.m2/mySettings.xml; };"
 
