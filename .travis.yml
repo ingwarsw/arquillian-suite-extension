@@ -8,6 +8,7 @@ jdk:
 
 env:
   global:
+    - TEST_COMMAND=mvn test -P${PROFILE} -T2C
     - SONATYPE_USERNAME=ingwar
     - secure: "Lqi30fOkp2QgSTxLDWlPW1ArSva/mWHW5yjTalw1Pk/v7LTEHA4LfcOEMKJ/RfH3gKvpq0UP90Nb8t4cAooM1AkHKLb/5lOv8eys4Qj3XyeJcmDLJz8Znre0r6SWA8/DFMzugjPu++4ul+CQOFB8/DkCeA3hDVRuI4yHYKVwArM="
   matrix:
@@ -33,13 +34,13 @@ matrix:
           env: "PROFILE=test-jboss-managed-domain"
     include:
         - jdk: oraclejdk7
-          env: "PROFILE=test-jboss-managed,coveralls-coverage"
+          env: "PROFILE=test-jboss-managed,coveralls-coverage SONATYPE_SNAPSHOT=true"
 
 # Try downloading all stuff || try harder || try --force
-install: mvn test -P${PROFILE} -DskipTests || mvn test -P${PROFILE} -DskipTests || mvn test -P${PROFILE} -DskipTests || mvn test -P${PROFILE} -DskipTests || mvn test -P${PROFILE} -DskipTests || mvn test -P${PROFILE} -DskipTests
+install: $TEST_COMMAND -DskipTests || mvn test -P${PROFILE} -DskipTests || mvn test -P${PROFILE} -DskipTests || mvn test -P${PROFILE} -DskipTests || mvn test -P${PROFILE} -DskipTests || mvn test -P${PROFILE} -DskipTests
 
-script: mvn test -P${PROFILE}
+script: $TEST_COMMAND
 
 after_success:
-  - "[[ $TRAVIS_BRANCH == \"master\" ]] && { python travis/addServer.py; mvn clean deploy -DskipTests --settings ~/.m2/mySettings.xml; };"
+  - "[[ $TRAVIS_BRANCH == 'master' && SONATYPE_SNAPSHOT == 'true' ]] && { python travis/addServer.py; mvn deploy -DskipTests --settings ~/.m2/mySettings.xml; };"
 
