@@ -35,17 +35,9 @@ matrix:
         - jdk: oraclejdk7
           env: "PROFILE=test-jboss-managed,coveralls-coverage SONATYPE_SNAPSHOT=true"
 
-before_install:
-  - export MAVEN_OPTS='-Dmaven.artifact.threads=10 -T4'
-  - export SCRIPT_COMMAND="mvn test -P${PROFILE}"
-  - export INSTALL_COMMAND="$SCRIPT_COMMAND -DskipTests"
-  - echo "'SCRIPT_COMMAND=$SCRIPT_COMMAND' INSTALL_COMMAND='$INSTALL_COMMAND'"
+install: travis/travis.py --fetch
 
-# Try downloading all stuff || try harder || try --force
-install: $INSTALL_COMMAND || $INSTALL_COMMAND || $INSTALL_COMMAND || $INSTALL_COMMAND || $INSTALL_COMMAND 
+script: travis/travis.py --test
 
-script: $SCRIPT_COMMAND
-
-after_success:
-  - "[[ $SONATYPE_SNAPSHOT == 'true' ]] && { python travis/addServer.py; $INSTALL_COMMAND deploy --settings ~/.m2/mySettings.xml; };"
+after_success: travis/travis.py --deploy
 
