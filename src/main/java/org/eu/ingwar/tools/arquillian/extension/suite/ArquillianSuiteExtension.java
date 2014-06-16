@@ -119,7 +119,7 @@ public class ArquillianSuiteExtension implements LoadableExtension {
         /**
          * Method ignoring DeployManagedDeployments events if already deployed.
          *
-         * @param ignored Event to ignore
+         * @param eventContext Event to check
          */
         public void blockDeployManagedDeploymentsWhenNeeded(@Observes EventContext<DeployManagedDeployments> eventContext) {
             if (deployDeployments) {
@@ -135,7 +135,7 @@ public class ArquillianSuiteExtension implements LoadableExtension {
         /**
          * Method ignoring GenerateDeployment events if deployment is already done.
          *
-         * @param eventContext Event to ignore or fire.
+         * @param eventContext Event to check
          */
         public void blockGenerateDeploymentWhenNeeded(@Observes EventContext<GenerateDeployment> eventContext) {
             if (suiteDeploymentGenerated) {
@@ -153,7 +153,7 @@ public class ArquillianSuiteExtension implements LoadableExtension {
          *
          * Only at undeploy container we will undeploy all.
          *
-         * @param ignored Event to ignore
+         * @param eventContext Event to check
          */
         public void blockUnDeployManagedDeploymentsWhenNeeded(@Observes EventContext<UnDeployManagedDeployments> eventContext) {
             if (undeployDeployments) {
