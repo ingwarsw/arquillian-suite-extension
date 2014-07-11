@@ -26,7 +26,6 @@ import java.util.Set;
 import org.jboss.arquillian.container.spi.client.deployment.DeploymentScenario;
 import org.jboss.arquillian.container.spi.event.DeployManagedDeployments;
 import org.jboss.arquillian.container.spi.event.UnDeployManagedDeployments;
-import org.jboss.arquillian.container.spi.event.container.AfterStart;
 import org.jboss.arquillian.container.spi.event.container.BeforeStop;
 import org.jboss.arquillian.container.test.impl.client.deployment.event.GenerateDeployment;
 import org.jboss.arquillian.core.api.Event;
@@ -43,6 +42,7 @@ import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.jboss.arquillian.core.impl.ManagerImpl;
+import org.jboss.arquillian.test.spi.event.suite.BeforeSuite;
 import org.reflections.Reflections;
 
 /**
@@ -171,7 +171,7 @@ public class ArquillianSuiteExtension implements LoadableExtension {
          *
          * @param event AfterStart event to catch
          */
-        public void startup(@Observes(precedence = -100) final AfterStart event) {
+        public void startup(@Observes(precedence = -100) final BeforeSuite event) {
             debug("Catching AfterStart event {0}", event.toString());
             executeInClassScope(new Callable<Void>() {
                 @Override
