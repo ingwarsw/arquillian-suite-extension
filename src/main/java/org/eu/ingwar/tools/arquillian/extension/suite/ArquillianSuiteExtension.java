@@ -124,11 +124,11 @@ public class ArquillianSuiteExtension implements LoadableExtension {
         public void blockDeployManagedDeploymentsWhenNeeded(@Observes EventContext<DeployManagedDeployments> eventContext) {
             if (deployDeployments) {
                 deployDeployments = false;
-                debug("NOT Blocking DeployManagedDeployments event {}", eventContext.getEvent().toString());
+                debug("NOT Blocking DeployManagedDeployments event {0}", eventContext.getEvent().toString());
                 eventContext.proceed();
             } else {
                 // Do nothing with event.
-                debug("Blocking DeployManagedDeployments event {}", eventContext.getEvent().toString());
+                debug("Blocking DeployManagedDeployments event {0}", eventContext.getEvent().toString());
             }
         }
 
@@ -140,10 +140,10 @@ public class ArquillianSuiteExtension implements LoadableExtension {
         public void blockGenerateDeploymentWhenNeeded(@Observes EventContext<GenerateDeployment> eventContext) {
             if (suiteDeploymentGenerated) {
                 // Do nothing with event.
-                debug("Blocking GenerateDeployment event {}", eventContext.getEvent().toString());
+                debug("Blocking GenerateDeployment event {0}", eventContext.getEvent().toString());
             } else {
                 suiteDeploymentGenerated = true;
-                debug("NOT Blocking GenerateDeployment event {}", eventContext.getEvent().toString());
+                debug("NOT Blocking GenerateDeployment event {0}", eventContext.getEvent().toString());
                 eventContext.proceed();
             }
         }
@@ -158,11 +158,11 @@ public class ArquillianSuiteExtension implements LoadableExtension {
         public void blockUnDeployManagedDeploymentsWhenNeeded(@Observes EventContext<UnDeployManagedDeployments> eventContext) {
             if (undeployDeployments) {
                 undeployDeployments = false;
-                debug("NOT Blocking UnDeployManagedDeployments event {}", eventContext.getEvent().toString());
+                debug("NOT Blocking UnDeployManagedDeployments event {0}", eventContext.getEvent().toString());
                 eventContext.proceed();
             } else {
                 // Do nothing with event.
-                debug("Blocking UnDeployManagedDeployments event {}", eventContext.getEvent().toString());
+                debug("Blocking UnDeployManagedDeployments event {0}", eventContext.getEvent().toString());
             }
         }
 
