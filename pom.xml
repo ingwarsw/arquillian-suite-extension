@@ -54,8 +54,8 @@
         <maven.compiler.source>1.6</maven.compiler.source>
         
         <!-- Libraries versions -->
-        <version.arquillian_core>1.1.2.Final</version.arquillian_core>
-        <version.jacoco>0.6.0.201210061924</version.jacoco>
+        <version.arquillian_core>1.1.5.Final</version.arquillian_core>
+        <version.jacoco>0.6.4.201312101107</version.jacoco>
         <version.jbossas>7.1.1.Final</version.jbossas>
         <version.glassfish>3.1.2.2</version.glassfish>
         <version.wildfly>8.0.0.Final</version.wildfly>
