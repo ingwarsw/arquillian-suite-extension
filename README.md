@@ -1,7 +1,7 @@
 The Arquillian Suite Extension
 ==================================
 
-[![Build Status](https://travis-ci.org/ingwarsw/arquillian-suite-extension.png)](https://travis-ci.org/ingwarsw/arquillian-suite-extension)
+[![Build Status](https://travis-ci.org/ingwarsw/arquillian-suite-extension.png?branch=master)](https://travis-ci.org/ingwarsw/arquillian-suite-extension)
 [![Coverage Status](https://coveralls.io/repos/ingwarsw/arquillian-suite-extension/badge.png?branch=master)](https://coveralls.io/r/ingwarsw/arquillian-suite-extension?branch=master)
 
 The Extension will force all Classes in a Module into a TestSuite running from the same DeploymentScenario.
