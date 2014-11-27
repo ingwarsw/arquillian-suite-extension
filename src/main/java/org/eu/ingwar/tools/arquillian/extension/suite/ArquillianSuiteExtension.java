@@ -42,6 +42,7 @@ import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.jboss.arquillian.core.impl.ManagerImpl;
+import org.jboss.arquillian.test.spi.annotation.TestScoped;
 import org.jboss.arquillian.test.spi.event.suite.BeforeSuite;
 import org.reflections.Reflections;
 
@@ -97,24 +98,46 @@ public class ArquillianSuiteExtension implements LoadableExtension {
      */
     public static class SuiteDeployer {
 
-        @Inject // Active some form of ClassContext around our deployments due to assumption bug in AS7 extension.
-        private Instance<ClassContext> classContext;
-        @Inject
-        @ClassScoped
-        private InstanceProducer<DeploymentScenario> classDeploymentScenario;
+        // Events
         @Inject
         private Event<UnDeployManagedDeployments> undeployEvent;
         @Inject
         private Event<GenerateDeployment> generateDeploymentEvent;
+
+        @Inject // Active some form of ClassContext around our deployments due to assumption bug in AS7 extension.
+        private Instance<ClassContext> classContext;
         @Inject
         private Instance<ExtendedSuiteContext> extendedSuiteContext;
-        private DeploymentScenario suiteDeploymentScenario;
-        @ExtendedSuiteScoped
         @Inject
+        @ExtendedSuiteScoped
         private InstanceProducer<DeploymentScenario> suiteDeploymentScenarioInstanceProducer;
+        @Inject
+        @ExtendedSuiteScoped
+        private InstanceProducer<TestClass> extestClass;
+
+        // Local variables
         private boolean suiteDeploymentGenerated;
         private boolean deployDeployments;
         private boolean undeployDeployments;
+
+        /**
+         * Method ignoring GenerateDeployment events if deployment is already done.
+         *
+         * @param eventContext Event to check
+         */
+        boolean a = false;
+        public void sss(@Observes EventContext<DeploymentScenario> eventContext) {
+            if (a == false) {
+                debug("Blocking GenerateDeployment event {0}", eventContext.getEvent().toString());
+                a = true;
+            suiteDeploymentScenarioInstanceProducer.set(eventContext.getEvent());
+                a = false;
+
+                extestClass.set(new TestClass(deploymentClass));
+                eventContext.proceed();
+            }
+        }
+
 
         /**
          * Method ignoring DeployManagedDeployments events if already deployed.
@@ -143,7 +166,8 @@ public class ArquillianSuiteExtension implements LoadableExtension {
                 debug("Blocking GenerateDeployment event {0}", eventContext.getEvent().toString());
             } else {
                 suiteDeploymentGenerated = true;
-                debug("NOT Blocking GenerateDeployment event {0}", eventContext.getEvent().toString());
+                debug("NOT Blocking GenerateDeployment event {0} {1}", eventContext.getEvent().toString(), eventContext.getEvent().getTestClass());
+                extestClass.set(eventContext.getEvent().getTestClass());
                 eventContext.proceed();
             }
         }
@@ -173,17 +197,15 @@ public class ArquillianSuiteExtension implements LoadableExtension {
          */
         public void startup(@Observes(precedence = -100) final BeforeSuite event) {
             debug("Catching AfterStart event {0}", event.toString());
+            extendedSuiteContext.get().activate();
             executeInClassScope(new Callable<Void>() {
                 @Override
                 public Void call() {
                     generateDeploymentEvent.fire(new GenerateDeployment(new TestClass(deploymentClass)));
-                    suiteDeploymentScenario = classDeploymentScenario.get();
                     return null;
                 }
             });
             deployDeployments = true;
-            extendedSuiteContext.get().activate();
-            suiteDeploymentScenarioInstanceProducer.set(suiteDeploymentScenario);
         }
 
         /**

@@ -137,6 +137,13 @@
             <scope>test</scope>
         </dependency>
 
+<dependency>
+    <groupId>org.jboss.arquillian.extension</groupId>
+    <artifactId>arquillian-warp</artifactId>
+    <version>1.0.0.Alpha7</version>
+    <type>pom</type>
+</dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

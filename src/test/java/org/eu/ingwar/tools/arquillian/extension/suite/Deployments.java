@@ -29,6 +29,7 @@ import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuit
 import org.eu.ingwar.tools.arquillian.extension.suite.extra.ExtensionExtra1Test;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.TargetsContainer;
+import org.jboss.arquillian.warp.WarpTest;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
@@ -36,6 +37,7 @@ import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 
 @ArquillianSuiteDeployment
+//@WarpTest
 public class Deployments {
 
     @Deployment(name = "normal", order = 3)
