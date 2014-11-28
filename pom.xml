@@ -58,7 +58,7 @@
         <version.jacoco>0.6.4.201312101107</version.jacoco>
         <version.jbossas>7.1.1.Final</version.jbossas>
         <version.glassfish>3.1.2.2</version.glassfish>
-        <version.wildfly>8.0.0.Final</version.wildfly>
+        <version.wildfly>8.2.0.Final</version.wildfly>
         
         <!-- Other props -->
         <jbossHome>${project.build.directory}/jboss-as-${version.jbossas}</jbossHome>
