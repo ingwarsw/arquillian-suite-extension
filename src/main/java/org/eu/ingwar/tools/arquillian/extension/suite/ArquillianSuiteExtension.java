@@ -22,7 +22,9 @@ package org.eu.ingwar.tools.arquillian.extension.suite;
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ExtendedSuiteScoped;
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuiteDeployment;
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquilianSuiteDeployment;
+
 import java.util.Set;
+
 import org.jboss.arquillian.container.spi.client.deployment.DeploymentScenario;
 import org.jboss.arquillian.container.spi.event.DeployManagedDeployments;
 import org.jboss.arquillian.container.spi.event.UnDeployManagedDeployments;
@@ -38,11 +40,14 @@ import org.jboss.arquillian.core.spi.LoadableExtension;
 import org.jboss.arquillian.test.spi.TestClass;
 import org.jboss.arquillian.test.spi.annotation.ClassScoped;
 import org.jboss.arquillian.test.spi.context.ClassContext;
+
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.jboss.arquillian.core.impl.ManagerImpl;
 import org.jboss.arquillian.test.spi.event.suite.BeforeSuite;
+import org.junit.runners.Suite;
 import org.reflections.Reflections;
 
 /**
@@ -60,14 +65,14 @@ public class ArquillianSuiteExtension implements LoadableExtension {
      */
     @Override
     public void register(ExtensionBuilder builder) {
-        deploymentClass = getDeploymentClass();
+    	deploymentClass = getDeploymentClass();
         if (deploymentClass != null) {
             builder.observer(SuiteDeployer.class).context(ExtendedSuiteContextImpl.class);
         } else {
             log.log(Level.WARNING, "arquillian-suite-deployment: Cannot find class annotated with @ArquillianSuiteDeployment, will try normal way..");
         }
     }
-
+    
     /**
      * Finds class with should produce global deployment for project.
      *
@@ -75,6 +80,9 @@ public class ArquillianSuiteExtension implements LoadableExtension {
      * @ArquillianSuiteDeployment annotation
      */
     private static Class<?> getDeploymentClass() {
+    	if(!isTestSuite()) {
+    		return null; // if not run by SuiteRunner ignore @ArquillianSuiteDeployment
+    	}
         Reflections reflections = new Reflections("");
         Set<Class<?>> results = reflections.getTypesAnnotatedWith(ArquillianSuiteDeployment.class, true);
         if (results.isEmpty()) {
@@ -90,6 +98,21 @@ public class ArquillianSuiteExtension implements LoadableExtension {
             throw new IllegalStateException("Duplicated classess annotated with @ArquillianSuiteDeployment");
         }
         return results.iterator().next();
+    }
+    
+    /**
+     * Determines if a Test Suite is being run
+     * 
+     * @return true if run by SuiteRunner
+     */
+    private static boolean isTestSuite() {
+    	StackTraceElement[] elements = Thread.currentThread().getStackTrace();
+    	for(int i = elements.length -1; i > -1; i--) {
+    		if(elements[i].getClassName().equals(Suite.class.getName())) {
+    			return true;
+    		}
+    	}
+    	return false;
     }
 
     /**
