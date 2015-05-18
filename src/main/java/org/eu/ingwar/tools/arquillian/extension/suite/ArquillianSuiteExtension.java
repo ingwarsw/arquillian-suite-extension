@@ -19,10 +19,12 @@ package org.eu.ingwar.tools.arquillian.extension.suite;
  * limitations under the License.
  * #L%
  */
-import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ExtendedSuiteScoped;
-import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuiteDeployment;
-import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquilianSuiteDeployment;
 import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuiteDeployment;
+import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ExtendedSuiteScoped;
 import org.jboss.arquillian.container.spi.client.deployment.DeploymentScenario;
 import org.jboss.arquillian.container.spi.event.DeployManagedDeployments;
 import org.jboss.arquillian.container.spi.event.UnDeployManagedDeployments;
@@ -33,16 +35,14 @@ import org.jboss.arquillian.core.api.Instance;
 import org.jboss.arquillian.core.api.InstanceProducer;
 import org.jboss.arquillian.core.api.annotation.Inject;
 import org.jboss.arquillian.core.api.annotation.Observes;
+import org.jboss.arquillian.core.impl.ManagerImpl;
 import org.jboss.arquillian.core.spi.EventContext;
 import org.jboss.arquillian.core.spi.LoadableExtension;
 import org.jboss.arquillian.test.spi.TestClass;
 import org.jboss.arquillian.test.spi.annotation.ClassScoped;
 import org.jboss.arquillian.test.spi.context.ClassContext;
-import java.util.concurrent.Callable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.jboss.arquillian.core.impl.ManagerImpl;
 import org.jboss.arquillian.test.spi.event.suite.BeforeSuite;
+import org.junit.runners.Suite;
 import org.reflections.Reflections;
 
 /**
@@ -78,10 +78,7 @@ public class ArquillianSuiteExtension implements LoadableExtension {
         Reflections reflections = new Reflections("");
         Set<Class<?>> results = reflections.getTypesAnnotatedWith(ArquillianSuiteDeployment.class, true);
         if (results.isEmpty()) {
-            results = reflections.getTypesAnnotatedWith(ArquilianSuiteDeployment.class, true);
-            if (results.isEmpty()) {
-                return null;
-            }
+            return null;
         }
         if (results.size() > 1) {
             for (Class<?> type : results) {
@@ -89,12 +86,32 @@ public class ArquillianSuiteExtension implements LoadableExtension {
             }
             throw new IllegalStateException("Duplicated classess annotated with @ArquillianSuiteDeployment");
         }
-        return results.iterator().next();
+
+        Class<?> result = results.iterator().next();
+        ArquillianSuiteDeployment anno = result.getAnnotation(ArquillianSuiteDeployment.class);
+        // if not run by SuiteRunner && suoteOnly ignore @ArquillianSuiteDeployment
+        if (anno.suiteOnly() && !isTestSuite()) {
+            log.log(Level.INFO, "arquillian-suite-deployment: Class marked @ArquillianSuiteDeployment with suiteOnly run without SuiteRunner, not usind suite");
+            return null;
+        }
+        return result;
     }
 
     /**
+     * Determines if a Test Suite is being run
      *
+     * @return true if run by SuiteRunner
      */
+    private static boolean isTestSuite() {
+        StackTraceElement[] elements = Thread.currentThread().getStackTrace();
+        for (StackTraceElement element : elements) {
+            if (element.getClass().equals(Suite.class)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static class SuiteDeployer {
 
         @Inject // Active some form of ClassContext around our deployments due to assumption bug in AS7 extension.

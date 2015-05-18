@@ -41,5 +41,12 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Target(ElementType.TYPE)
 public @interface ArquillianSuiteDeployment {
+    
+    /**
+     * Use only SuiteDeployment for Suite.
+     * 
+     * @return true if use SuiteDeployer for suites only.
+     */
+    public boolean suiteOnly() default false;
 
 }
