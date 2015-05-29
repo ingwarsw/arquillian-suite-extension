@@ -44,6 +44,7 @@ import java.util.logging.Logger;
 import org.jboss.arquillian.core.impl.ManagerImpl;
 import org.jboss.arquillian.test.spi.event.suite.BeforeSuite;
 import org.reflections.Reflections;
+import org.reflections.util.ClasspathHelper;
 
 /**
  * Arquillian Suite Extension main class.
