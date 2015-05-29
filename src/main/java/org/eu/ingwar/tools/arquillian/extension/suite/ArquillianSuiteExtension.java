@@ -69,27 +69,25 @@ public class ArquillianSuiteExtension implements LoadableExtension {
     }
 
     /**
-     * Finds class with should produce global deployment for project.
+     * Finds class with should produce global deployment PER project.
      *
      * @return class marked witch
      * @ArquillianSuiteDeployment annotation
      */
     private static Class<?> getDeploymentClass() {
-        Reflections reflections = new Reflections("");
-        Set<Class<?>> results = reflections.getTypesAnnotatedWith(ArquillianSuiteDeployment.class, true);
-        if (results.isEmpty()) {
-            results = reflections.getTypesAnnotatedWith(ArquilianSuiteDeployment.class, true);
-            if (results.isEmpty()) {
-                return null;
+        // Reflection all classes to search for Annotation @ArquillianSuiteDeployment.
+        final Set<Class<?>> results = new Reflections("").getTypesAnnotatedWith(ArquillianSuiteDeployment.class, true);
+        // Had a bug that if you open inside eclipse more than one project with @ArquillianSuiteDeployment and is a dependency, the test doesn't run because found more than one @ArquillianSuiteDeployment.
+        // Filter the deployment PER project.
+        final Reflections reflections = new Reflections(Thread.currentThread().getContextClassLoader().getResource(""));
+        for (final Class<?> clazz : results) {
+            // Just verify if the class is the class that your project is looking for.
+            if (!reflections.getSubTypesOf(clazz).isEmpty()) {
+                // Return the correct Class.
+                return clazz;
             }
         }
-        if (results.size() > 1) {
-            for (Class<?> type : results) {
-                log.log(Level.SEVERE, "arquillian-suite-deployment: Duplicated class annotated with @ArquillianSuiteDeployment: {0}", type.getName());
-            }
-            throw new IllegalStateException("Duplicated classess annotated with @ArquillianSuiteDeployment");
-        }
-        return results.iterator().next();
+        return null;
     }
 
     /**
