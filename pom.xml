@@ -479,12 +479,12 @@
                     <plugin>
                         <groupId>org.eluder.coveralls</groupId>
                         <artifactId>coveralls-maven-plugin</artifactId>
-                        <version>3.1.0</version>
+                        <version>3.2.1</version>
                         <executions>
                             <execution>
                                 <id>coveralls-jacoco</id>
                                 <goals>
-                                    <goal>jacoco</goal>
+                                    <goal>report</goal>
                                 </goals>
                                 <phase>install</phase>
                             </execution>
