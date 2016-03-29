@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <!-- Parent -->
@@ -22,19 +23,19 @@
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
-    
+
     <scm>
         <connection>scm:git:https://github.com/ingwarsw/arquillian-suite-extension.git</connection>
         <developerConnection>scm:git:https://github.com/ingwarsw/arquillian-suite-extension.git</developerConnection>
         <url>https://github.com/ingwarsw/arquillian-suite-extension</url>
         <tag>HEAD</tag>
     </scm>
-    
+
     <organization>
         <name>Ingwar &amp; co.</name>
         <url>http://ingwar.eu.org</url>
     </organization>
-    
+
     <developers>
         <developer>
             <id>ingwarsw</id>
@@ -48,21 +49,21 @@
         <project.build.outputEncoding>UTF-8</project.build.outputEncoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        
+
         <!-- Java versions -->
         <maven.compiler.target>1.6</maven.compiler.target>
         <maven.compiler.source>1.6</maven.compiler.source>
-        
+
         <!-- Libraries versions -->
         <version.arquillian_core>1.1.8.Final</version.arquillian_core>
         <version.jacoco>0.7.4.201502262128</version.jacoco>
         <version.jbossas>7.1.1.Final</version.jbossas>
         <version.glassfish>3.1.2.2</version.glassfish>
-        <version.wildfly>8.2.0.Final</version.wildfly>
-        
+        <version.wildfly>8.2.1.Final</version.wildfly>
+
         <!-- Other props -->
         <jbossHome>${project.build.directory}/jboss-as-${version.jbossas}</jbossHome>
-        
+
         <test.container>standalone</test.container>
     </properties>
 
@@ -99,13 +100,13 @@
             <groupId>org.jboss.shrinkwrap.resolver</groupId>
             <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>org.jboss.shrinkwrap.resolver</groupId>
             <artifactId>shrinkwrap-resolver-impl-maven-archive</artifactId>
             <type>jar</type>
         </dependency>
-        
+
         <dependency>
             <groupId>org.jboss.shrinkwrap</groupId>
             <artifactId>shrinkwrap-impl-base</artifactId>
@@ -116,14 +117,14 @@
             <artifactId>reflections</artifactId>
             <version>0.9.10</version>
         </dependency>
-        
+
         <dependency>
             <groupId>org.jboss.spec.javax.ejb</groupId>
             <artifactId>jboss-ejb-api_3.1_spec</artifactId>
             <version>1.0.2.Final</version>
             <scope>provided</scope>
         </dependency>
-        
+
         <!--Test dependencies-->
         <dependency>
             <groupId>org.jboss.arquillian.protocol</groupId>
@@ -144,7 +145,7 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-        
+
     <build>
         <pluginManagement>
             <plugins>
@@ -203,7 +204,7 @@
                 <configuration>
                     <tagNameFormat>v@{project.version}</tagNameFormat>
                 </configuration>
-            </plugin>            
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
@@ -220,12 +221,12 @@
                         <phase>test-compile</phase>
                     </execution>
                 </executions>
-            </plugin>            
+            </plugin>
         </plugins>
     </build>
-    
+
     <profiles>
-        
+
         <!-- Sign atrefact on release -->
         <profile>
             <id>release-sign-artifacts</id>
@@ -254,7 +255,7 @@
                 </plugins>
             </build>
         </profile>
-        
+
         <!-- Profile for generating sources and javadocs -->
         <profile>
             <id>generate-sources-and-javadocs</id>
@@ -294,8 +295,8 @@
                 </plugins>
             </build>
         </profile>
-        
-        
+
+
         <!-- An optional Arquillian testing profile that executes tests
         in your JBoss remote instance -->
         <profile>
@@ -309,7 +310,7 @@
                 </dependency>
             </dependencies>
         </profile>
-        
+
         <profile>
             <id>test-jboss-managed</id>
             <activation>
@@ -363,7 +364,7 @@
                 </plugins>
             </build>
         </profile>
- 
+
         <profile>
             <id>test-wildfly-managed</id>
             <properties>
@@ -416,6 +417,17 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>test-wildfly-remote</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.wildfly</groupId>
+                    <artifactId>wildfly-arquillian-container-remote</artifactId>
+                    <version>${version.wildfly}</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </profile>
 
         <!-- An optional Arquillian testing profile that executes tests
         in your Glassfish Embeded instance -->
@@ -436,7 +448,7 @@
                 </dependency>
             </dependencies>
         </profile>
-        
+
         <!-- Optional profile for jacoco code coverage on coveralls -->
         <profile>
             <id>coveralls-coverage</id>
@@ -493,13 +505,13 @@
                 </plugins>
             </build>
         </profile>
-        
+
         <profile>
             <id>groups-test</id>
             <properties>
                 <groups>org.eu.ingwar.tools.arquillian.extension.groups.AlphaGroup</groups>
             </properties>
         </profile>
- 
+
     </profiles>
 </project>
