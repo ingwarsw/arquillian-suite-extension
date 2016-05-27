@@ -22,11 +22,12 @@ package org.eu.ingwar.tools.arquillian.extension.suite;
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ExtendedSuiteScoped;
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuiteDeployment;
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquilianSuiteDeployment;
-import java.util.Set;
+
 import org.jboss.arquillian.container.spi.client.deployment.DeploymentScenario;
 import org.jboss.arquillian.container.spi.event.DeployManagedDeployments;
 import org.jboss.arquillian.container.spi.event.UnDeployManagedDeployments;
 import org.jboss.arquillian.container.spi.event.container.BeforeStop;
+import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.impl.client.deployment.event.GenerateDeployment;
 import org.jboss.arquillian.core.api.Event;
 import org.jboss.arquillian.core.api.Instance;
@@ -41,6 +42,9 @@ import org.jboss.arquillian.test.spi.context.ClassContext;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.lang.reflect.Method;
+import java.util.HashSet;
+import java.util.Set;
 import org.jboss.arquillian.core.impl.ManagerImpl;
 import org.jboss.arquillian.test.spi.event.suite.BeforeSuite;
 import org.reflections.Reflections;
@@ -79,24 +83,37 @@ public class ArquillianSuiteExtension implements LoadableExtension {
         // Had a bug that if you open inside eclipse more than one project with @ArquillianSuiteDeployment and is a dependency, the test doesn't run because found more than one @ArquillianSuiteDeployment.
         // Filter the deployment PER project.
         final Reflections reflections = new Reflections(ClasspathHelper.contextClassLoader().getResource(""));
-        // Reflection all classes to search for Annotation @ArquillianSuiteDeployment.
-		Set<Class<?>> results = reflections.getTypesAnnotatedWith(ArquillianSuiteDeployment.class, true);
+	// Reflection all classes to search for Annotation @ArquillianSuiteDeployment.
+	Set<Class<?>> results = reflections.getTypesAnnotatedWith(ArquillianSuiteDeployment.class, true);
+	if (results.isEmpty()) {
+	    // Keeping compatibility backward.
+		results = reflections.getTypesAnnotatedWith(ArquilianSuiteDeployment.class, true);
 		if (results.isEmpty()) {
-		    // Keeping compatibility backward.
-			results = reflections.getTypesAnnotatedWith(ArquilianSuiteDeployment.class, true);
-			if (results.isEmpty()) {
-				return null;
+			return null;
+		}
+	}
+	// Search for methods with annotation @Deployments inside the classes. Using Set to filter class duplication.
+	// TODO - Suggestion: Can be switched to guava to filter these classes.
+	final Set<Class<?>> classes = new HashSet<Class<?>>();
+	for (final Class<?> clazz : results) {
+		for (final Method method : clazz.getMethods()) {
+			// Verify the class and if the method has the @Deployments annotation.
+			if (method.getDeclaringClass().equals(clazz) && method.isAnnotationPresent(Deployment.class)) {
+				// Add the classes that has the @Deployments method.
+				classes.add(clazz);
 			}
 		}
-		// Verify if has more than one @ArquillianSuiteDeployment.
-		if (results.size() > 1) {
-			for (final Class<?> type : results) {
-				log.log(Level.SEVERE, "arquillian-suite-deployment: Duplicated class annotated with @ArquillianSuiteDeployment: {0}", type.getName());
-			}
-			throw new IllegalStateException("Duplicated classess annotated with @ArquillianSuiteDeployment");
+	}
+	
+	// Verify if has more than one @ArquillianSuiteDeployment.
+	if (classes.size() > 1) {
+		for (final Class<?> type : classes) {
+			log.log(Level.SEVERE, "arquillian-suite-deployment: Duplicated class annotated with @ArquillianSuiteDeployment: {0}", type.getName());
 		}
-		// Return the single result.
-		return results.iterator().next();
+		throw new IllegalStateException("Duplicated classes annotated with @ArquillianSuiteDeployment");
+	}
+	// Return the single result.
+	return classes.iterator().next();
     }
 
     /**
