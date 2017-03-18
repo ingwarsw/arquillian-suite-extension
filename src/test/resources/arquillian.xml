@@ -31,6 +31,9 @@ limitations under the License.
     <!-- standalone configuration -->
     <group qualifier="standalone" default="true">
         <container qualifier="app">
+            <configuration>
+                <property name="javaVmArguments">-Xmx1G</property>
+            </configuration>
         </container>
     </group>
     
@@ -38,9 +41,7 @@ limitations under the License.
     <group qualifier="domain">
         <container qualifier="DomainController">
             <configuration>
-                <property name="containerNameMap">
-                    main-server-group=app,
-                </property>
+                <property name="containerNameMap">main-server-group=app,</property>
             </configuration>
         </container>
     </group>
