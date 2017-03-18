@@ -4,9 +4,6 @@ sudo: false
 
 jdk:
   - oraclejdk8
-  - oraclejdk7
-  - openjdk7
-  - openjdk6
 
 env:
   global:
@@ -22,27 +19,9 @@ env:
 matrix:
     allow_failures:
         - env: "PROFILE=test-glassfish-embeded"
-    exclude:
-# Skip wildfly on java 6, not working
-        - jdk: openjdk6
-          env: "PROFILE=test-wildfly-managed"
-        - jdk: openjdk6
-          env: "PROFILE=test-wildfly-managed-domain"
-# Skip jbooss on java 8, not working
-        - jdk: oraclejdk8
-          env: "PROFILE=test-jboss-managed"
-        - jdk: oraclejdk8
-          env: "PROFILE=test-jboss-managed-domain"
     include:
-        - jdk: oraclejdk7
-          env: "PROFILE=test-jboss-managed,coveralls-coverage SONATYPE_SNAPSHOT=true"
-
-## Fix for GCE long hostname problem
-#before_install:
-#  - cat /etc/hosts # optionally check the content *before*
-#  - sudo hostname "$(hostname | cut -c1-63)"
-#  - sed -e "s/^\\(127\\.0\\.0\\.1.*\\)/\\1 $(hostname | cut -c1-63)/" /etc/hosts | sudo tee /etc/hosts
-#  - cat /etc/hosts # optionally check the content *after*
+        - jdk: oraclejdk8
+          env: "PROFILE=test-wildfly-managed,coveralls-coverage SONATYPE_SNAPSHOT=true"
 
 install: travis/travis.py --fetch
 
