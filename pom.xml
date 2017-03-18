@@ -61,8 +61,8 @@
         <!-- Libraries versions -->
         <version.arquillian_core>1.1.12.Final</version.arquillian_core>
         <version.jacoco>0.7.4.201502262128</version.jacoco>
-        <version.jbossas>7.1.1.Final</version.jbossas>
-        <version.glassfish>3.1.2.2</version.glassfish>
+        <version.jbossas>7.5.7.Final-redhat-3</version.jbossas>
+        <version.glassfish>4.1.1</version.glassfish>
         <version.wildfly>10.1.0.Final</version.wildfly>
         <version.arquillian_wildfly>2.0.2.Final</version.arquillian_wildfly>
 
@@ -306,6 +306,13 @@
         in your JBoss remote instance -->
         <profile>
             <id>test-jboss-remote</id>
+            <repositories>
+                <repository>
+                    <id>redhat-ga</id>
+                    <name>Redhat GA repo</name>
+                    <url>https://maven.repository.redhat.com/earlyaccess/all/</url>
+                </repository>
+            </repositories>
             <dependencies>
                 <dependency>
                     <groupId>org.jboss.as</groupId>
@@ -322,10 +329,18 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
+                <jbossHome>${project.build.directory}/jboss-eap-6.4</jbossHome>
                 <unpack.groupId>org.jboss.as</unpack.groupId>
                 <unpack.artifactId>jboss-as-dist</unpack.artifactId>
                 <unpack.version>${version.jbossas}</unpack.version>
             </properties>
+            <repositories>
+                <repository>
+                    <id>redhat-ga</id>
+                    <name>Redhat GA repo</name>
+                    <url>https://maven.repository.redhat.com/earlyaccess/all/</url>
+                </repository>
+            </repositories>
             <dependencies>
                 <dependency>
                     <groupId>org.jboss.as</groupId>
@@ -347,11 +362,19 @@
         <profile>
             <id>test-jboss-managed-domain</id>
             <properties>
+                <jbossHome>${project.build.directory}/jboss-eap-6.4</jbossHome>
                 <unpack.groupId>org.jboss.as</unpack.groupId>
                 <unpack.artifactId>jboss-as-dist</unpack.artifactId>
                 <unpack.version>${version.jbossas}</unpack.version>
                 <test.container>domain</test.container>
             </properties>
+            <repositories>
+                <repository>
+                    <id>redhat-ga</id>
+                    <name>Redhat GA repo</name>
+                    <url>https://maven.repository.redhat.com/earlyaccess/all/</url>
+                </repository>
+            </repositories>
             <dependencies>
                 <dependency>
                     <groupId>org.jboss.as</groupId>
