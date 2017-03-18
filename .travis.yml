@@ -1,10 +1,12 @@
 language: java
 
+sudo: false
+
 jdk:
-  - openjdk6
-  - openjdk7
-  - oraclejdk7
   - oraclejdk8
+  - oraclejdk7
+  - openjdk7
+  - openjdk6
 
 env:
   global:
@@ -35,12 +37,12 @@ matrix:
         - jdk: oraclejdk7
           env: "PROFILE=test-jboss-managed,coveralls-coverage SONATYPE_SNAPSHOT=true"
 
-# Fix for GCE long hostname problem
-before_install:
-  - cat /etc/hosts # optionally check the content *before*
-  - sudo hostname "$(hostname | cut -c1-63)"
-  - sed -e "s/^\\(127\\.0\\.0\\.1.*\\)/\\1 $(hostname | cut -c1-63)/" /etc/hosts | sudo tee /etc/hosts
-  - cat /etc/hosts # optionally check the content *after*
+## Fix for GCE long hostname problem
+#before_install:
+#  - cat /etc/hosts # optionally check the content *before*
+#  - sudo hostname "$(hostname | cut -c1-63)"
+#  - sed -e "s/^\\(127\\.0\\.0\\.1.*\\)/\\1 $(hostname | cut -c1-63)/" /etc/hosts | sudo tee /etc/hosts
+#  - cat /etc/hosts # optionally check the content *after*
 
 install: travis/travis.py --fetch
 
