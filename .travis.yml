@@ -18,7 +18,7 @@ env:
 
 matrix:
     allow_failures:
-        - env: "PROFILE=test-glassfish-embeded"
+        - env: "PROFILE=test-jboss-managed"
     include:
         - jdk: oraclejdk8
           env: "PROFILE=test-wildfly-managed,coveralls-coverage SONATYPE_SNAPSHOT=true"

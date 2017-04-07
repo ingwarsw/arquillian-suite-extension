@@ -19,10 +19,10 @@ package org.eu.ingwar.tools.arquillian.extension.suite;
  * limitations under the License.
  * #L%
  */
-import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ExtendedSuiteScoped;
-import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuiteDeployment;
+
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquilianSuiteDeployment;
-import java.util.Set;
+import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuiteDeployment;
+import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ExtendedSuiteScoped;
 import org.jboss.arquillian.container.spi.client.deployment.DeploymentScenario;
 import org.jboss.arquillian.container.spi.event.DeployManagedDeployments;
 import org.jboss.arquillian.container.spi.event.UnDeployManagedDeployments;
@@ -38,13 +38,14 @@ import org.jboss.arquillian.core.spi.LoadableExtension;
 import org.jboss.arquillian.test.spi.TestClass;
 import org.jboss.arquillian.test.spi.annotation.ClassScoped;
 import org.jboss.arquillian.test.spi.context.ClassContext;
-import java.util.concurrent.Callable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.jboss.arquillian.core.impl.ManagerImpl;
 import org.jboss.arquillian.test.spi.event.suite.BeforeSuite;
 import org.reflections.Reflections;
 import org.reflections.util.ClasspathHelper;
+
+import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Arquillian Suite Extension main class.
@@ -223,13 +224,14 @@ public class ArquillianSuiteExtension implements LoadableExtension {
         /**
          * Prints debug message.
          *
-         * Id arquillian.debug flag is set.
+         * If arquillian.debug flag is set.
          *
          * @param format format of message
          * @param message message objects to format
          */
         private void debug(String format, Object... message) {
-            if (ManagerImpl.DEBUG) {
+            Boolean DEBUG = Boolean.valueOf(System.getProperty("arquillian.debug"));
+            if (DEBUG) {
                 log.log(Level.WARNING, format, message);
             }
         }

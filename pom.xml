@@ -59,7 +59,7 @@
         <maven.compiler.source>1.6</maven.compiler.source>
 
         <!-- Libraries versions -->
-        <version.arquillian_core>1.1.12.Final</version.arquillian_core>
+        <version.arquillian_core>1.1.13.Final</version.arquillian_core>
         <version.jacoco>0.7.4.201502262128</version.jacoco>
         <version.jbossas>7.5.7.Final-redhat-3</version.jbossas>
         <version.glassfish>4.1.1</version.glassfish>
@@ -325,9 +325,6 @@
 
         <profile>
             <id>test-jboss-managed</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
             <properties>
                 <jbossHome>${project.build.directory}/jboss-eap-6.4</jbossHome>
                 <unpack.groupId>org.jboss.as</unpack.groupId>
@@ -395,6 +392,9 @@
 
         <profile>
             <id>test-wildfly-managed</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <properties>
                 <jbossHome>${project.build.directory}/wildfly-${version.wildfly}</jbossHome>
                 <unpack.groupId>org.wildfly</unpack.groupId>
