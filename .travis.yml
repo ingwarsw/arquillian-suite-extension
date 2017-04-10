@@ -21,11 +21,15 @@ matrix:
         - env: "PROFILE=test-glassfish-embeded"
     include:
         - jdk: oraclejdk8
-          env: "PROFILE=test-wildfly-managed,coveralls-coverage DEPLOY=true"
+          env: "PROFILE=test-wildfly-managed,coveralls-coverage"
 
 install: travis/travis.py --fetch
 
 script: travis/travis.py --test
 
-after_success: travis/travis.py --deploy
+deploy:
+  - provider: script
+    script: travis/travis.py --deploy
+    on:
+      tags: true
 
