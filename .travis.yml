@@ -7,8 +7,7 @@ jdk:
 
 env:
   global:
-    - SONATYPE_USERNAME=ingwar
-    - secure: "Lqi30fOkp2QgSTxLDWlPW1ArSva/mWHW5yjTalw1Pk/v7LTEHA4LfcOEMKJ/RfH3gKvpq0UP90Nb8t4cAooM1AkHKLb/5lOv8eys4Qj3XyeJcmDLJz8Znre0r6SWA8/DFMzugjPu++4ul+CQOFB8/DkCeA3hDVRuI4yHYKVwArM="
+    - DEPLOY_USERNAME=ingwarsw
   matrix:
     - PROFILE=test-jboss-managed
     - PROFILE=test-jboss-managed-domain
@@ -22,7 +21,7 @@ matrix:
         - env: "PROFILE=test-glassfish-embeded"
     include:
         - jdk: oraclejdk8
-          env: "PROFILE=test-wildfly-managed,coveralls-coverage SONATYPE_SNAPSHOT=true"
+          env: "PROFILE=test-wildfly-managed,coveralls-coverage DEPLOY=true"
 
 install: travis/travis.py --fetch
 
