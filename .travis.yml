@@ -14,11 +14,12 @@ env:
     - PROFILE=test-jboss-managed-domain
     - PROFILE=test-wildfly-managed
     - PROFILE=test-wildfly-managed-domain
-#    - PROFILE=test-glassfish-embeded
+    - PROFILE=test-glassfish-embeded
 
 matrix:
     allow_failures:
         - env: "PROFILE=test-jboss-managed"
+        - env: "PROFILE=test-glassfish-embeded"
     include:
         - jdk: oraclejdk8
           env: "PROFILE=test-wildfly-managed,coveralls-coverage SONATYPE_SNAPSHOT=true"

@@ -17,10 +17,6 @@
     <name>Arquillian suite extension</name>
     <inceptionYear>2013</inceptionYear>
 
-    <prerequisites>
-        <maven>3.0</maven>
-    </prerequisites>
-
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
@@ -62,7 +58,7 @@
         <version.arquillian_core>1.1.13.Final</version.arquillian_core>
         <version.jacoco>0.7.4.201502262128</version.jacoco>
         <version.jbossas>7.5.7.Final-redhat-3</version.jbossas>
-        <version.glassfish>4.1.1</version.glassfish>
+        <version.glassfish>4.1.2</version.glassfish>
         <version.wildfly>10.1.0.Final</version.wildfly>
         <version.arquillian_wildfly>2.0.2.Final</version.arquillian_wildfly>
 
@@ -471,7 +467,7 @@
                 <dependency>
                     <groupId>org.jboss.arquillian.container</groupId>
                     <artifactId>arquillian-glassfish-embedded-3.1</artifactId>
-                    <version>1.0.0.CR4</version>
+                    <version>1.0.0.Final</version>
                     <scope>test</scope>
                 </dependency>
             </dependencies>
