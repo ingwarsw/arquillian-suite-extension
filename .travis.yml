@@ -8,6 +8,7 @@ jdk:
 env:
   global:
     - DEPLOY_USERNAME=ingwarsw
+    - DEPLOY_SERVER_ID=bintray-ingwarsw-org.eu.ingwar.tools
   matrix:
     - PROFILE=test-wildfly-managed,coveralls-coverage
     - PROFILE=test-wildfly-managed-domain
