@@ -9,19 +9,16 @@ env:
   global:
     - DEPLOY_USERNAME=ingwarsw
   matrix:
-    - PROFILE=test-jboss-managed
-    - PROFILE=test-jboss-managed-domain
-    - PROFILE=test-wildfly-managed
+    - PROFILE=test-wildfly-managed,coveralls-coverage
     - PROFILE=test-wildfly-managed-domain
+    - PROFILE=test-jboss-managed-domain
+    - PROFILE=test-jboss-managed
     - PROFILE=test-glassfish-embeded
 
 matrix:
     allow_failures:
         - env: "PROFILE=test-jboss-managed"
         - env: "PROFILE=test-glassfish-embeded"
-    include:
-        - jdk: oraclejdk8
-          env: "PROFILE=test-wildfly-managed,coveralls-coverage"
 
 install: travis/travis.py --fetch
 
@@ -29,7 +26,9 @@ script: travis/travis.py --test
 
 deploy:
   - provider: script
+    skip_cleanup: true
     script: travis/travis.py --deploy
     on:
       tags: true
+      condition: "$PROFILE = test-wildfly-managed,coveralls-coverage"
 
