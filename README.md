@@ -14,7 +14,7 @@ Deploy will occur only once on first test witch require Arquillian.
 So far tested on:
 - Jboss 7.1, Jboss 7.2
 - EAP 6.1, EAP 6.2
-- Wildfly 8.0.0
+- Wildfly 8.0, Wildfly 10.0
 - Glassfish 3.2.2
 - Should work on other servers too
 
