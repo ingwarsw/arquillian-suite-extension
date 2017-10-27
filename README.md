@@ -136,14 +136,14 @@ To use domain to test classes you need to do few extra steps.
         </container>
     </group>
 
-All of that + extra switching betweeen standalone/domain is done in that project itself.
+All of that + extra switching between standalone/domain is done in that project itself.
 
 # Easiest way to move to suite:
 
 - Move all deployments to one class and make all your tests extend that class..
 - If you have more than one deployment name them and add everywhere in your tests @OperateOnDeployment
 - Check if everything is working
-- Dont go further unless your tests are not working at that moment (probably will work much slower then normally)
+- Don't go further unless your tests are not working at that moment (probably will work much slower then normally)
 - Add arquillian-suite as dependency
 - Check if its working (should work slow as before)
 - Add @ArquillianSuiteDeployment annotation on your deployment class

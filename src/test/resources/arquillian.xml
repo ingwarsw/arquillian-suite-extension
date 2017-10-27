@@ -21,6 +21,10 @@ limitations under the License.
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:schemaLocation="http://jboss.org/schema/arquillian http://jboss.org/schema/arquillian/arquillian_1_0.xsd">
 
+    <extension qualifier="suite">
+        <property name="deploymentClass">org.eu.ingwar.tools.arquillian.extension.suite.Deployments</property>
+    </extension>
+
     <engine>
         <!-- Restaarts managd instance every 200 tests -->
         <property name="maxTestClassesBeforeRestart">200</property>
