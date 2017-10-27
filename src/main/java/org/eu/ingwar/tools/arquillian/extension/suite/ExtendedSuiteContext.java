@@ -27,6 +27,6 @@ import org.jboss.arquillian.core.spi.context.NonIdBoundContext;
  *
  * @author Karol Lassak 'Ingwar'
  */
-public interface ExtendedSuiteContext extends NonIdBoundContext {
+interface ExtendedSuiteContext extends NonIdBoundContext {
 
 }
