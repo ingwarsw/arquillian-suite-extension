@@ -77,27 +77,29 @@ public class ArquillianSuiteExtension implements LoadableExtension {
      * @ArquillianSuiteDeployment annotation
      */
     private static Class<?> getDeploymentClass() {
-        // Had a bug that if you open inside eclipse more than one project with @ArquillianSuiteDeployment and is a dependency, the test doesn't run because found more than one @ArquillianSuiteDeployment.
-        // Filter the deployment PER project.
+        // Search for deployment class in first classpath entry (filter the deployment PER project in eclipse)
         final Reflections reflections = new Reflections(ClasspathHelper.contextClassLoader().getResource(""));
-        // Reflection all classes to search for Annotation @ArquillianSuiteDeployment.
-		Set<Class<?>> results = reflections.getTypesAnnotatedWith(ArquillianSuiteDeployment.class, true);
-		if (results.isEmpty()) {
-		    // Keeping compatibility backward.
-			results = reflections.getTypesAnnotatedWith(ArquilianSuiteDeployment.class, true);
-			if (results.isEmpty()) {
-				return null;
-			}
-		}
-		// Verify if has more than one @ArquillianSuiteDeployment.
-		if (results.size() > 1) {
-			for (final Class<?> type : results) {
-				log.log(Level.SEVERE, "arquillian-suite-deployment: Duplicated class annotated with @ArquillianSuiteDeployment: {0}", type.getName());
-			}
-			throw new IllegalStateException("Duplicated classess annotated with @ArquillianSuiteDeployment");
-		}
-		// Return the single result.
-		return results.iterator().next();
+        Set<Class<?>> results = reflections.getTypesAnnotatedWith(ArquillianSuiteDeployment.class, true);
+        if (results.isEmpty()) {
+            // Search for deployment class in whole classpath
+            results = new Reflections("").getTypesAnnotatedWith(ArquillianSuiteDeployment.class, true);
+            if (results.isEmpty()) {
+                // Keeping compatibility backward.
+                results = reflections.getTypesAnnotatedWith(ArquilianSuiteDeployment.class, true);
+                if (results.isEmpty()) {
+                    return null;
+                }
+            }
+        }
+        // Verify if has more than one @ArquillianSuiteDeployment.
+        if (results.size() > 1) {
+            for (final Class<?> type : results) {
+                log.log(Level.SEVERE, "arquillian-suite-deployment: Duplicated class annotated with @ArquillianSuiteDeployment: {0}", type.getName());
+            }
+            throw new IllegalStateException("Duplicated classess annotated with @ArquillianSuiteDeployment");
+        }
+        // Return the single result.
+        return results.iterator().next();
     }
 
     /**
