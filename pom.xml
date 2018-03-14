@@ -60,12 +60,12 @@
         <maven.compiler.source>1.6</maven.compiler.source>
 
         <!-- Libraries versions -->
-        <version.arquillian_core>1.1.13.Final</version.arquillian_core>
+        <version.arquillian_core>1.4.0.Final</version.arquillian_core>
         <version.jacoco>0.7.4.201502262128</version.jacoco>
         <version.jbossas>7.5.7.Final-redhat-3</version.jbossas>
         <version.glassfish>4.1.2</version.glassfish>
         <version.wildfly>10.1.0.Final</version.wildfly>
-        <version.arquillian_wildfly>2.0.2.Final</version.arquillian_wildfly>
+        <version.arquillian_wildfly>2.1.0.Final</version.arquillian_wildfly>
 
         <!-- Other props -->
         <jbossHome>${project.build.directory}/jboss-as-${version.jbossas}</jbossHome>
@@ -86,7 +86,7 @@
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>21.0</version>
+                <version>24.0-jre</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
