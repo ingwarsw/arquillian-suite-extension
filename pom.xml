@@ -71,6 +71,7 @@
         <jbossHome>${project.build.directory}/jboss-as-${version.jbossas}</jbossHome>
 
         <test.container>standalone</test.container>
+        <test.deploymentClass></test.deploymentClass>
     </properties>
 
     <dependencyManagement>
@@ -153,6 +154,13 @@
     </dependencies>
 
     <build>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <filtering>true</filtering>
+            </testResource>
+        </testResources>
+
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -202,6 +210,20 @@
                         <arquillian.launch>${test.container}</arquillian.launch>
                     </systemPropertyVariables>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>arquillian-conf-test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <properties>
+                                <test.deploymentClass>org.eu.ingwar.tools.arquillian.extension.suite.Deployments</test.deploymentClass>
+                            </properties>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

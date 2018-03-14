@@ -20,6 +20,7 @@ package org.eu.ingwar.tools.arquillian.extension.suite;
  * #L%
  */
 
+import org.apache.commons.lang.StringUtils;
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuiteDeployment;
 import org.jboss.arquillian.config.descriptor.api.ArquillianDescriptor;
 import org.jboss.arquillian.config.descriptor.api.ExtensionDef;
@@ -86,7 +87,7 @@ class DeploymentClassFinder {
     private static Class<?> getDeploymentClassFromConfig(ArquillianDescriptor descriptor) {
         String deploymentClassName = getDeploymentClassNameFromXml(descriptor);
 
-        if (deploymentClassName != null) {
+        if (StringUtils.isNotEmpty(deploymentClassName)) {
             try {
                 log.log(Level.INFO, "arquillian-suite-deployment: Using deployment class {0} from configuration.", deploymentClassName);
                 return Class.forName(deploymentClassName);
