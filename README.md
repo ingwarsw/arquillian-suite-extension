@@ -67,19 +67,6 @@ things bit faster at runtime and may help with finding right class on complicate
         <property name="deploymentClass">org.eu.ingwar.tools.arquillian.extension.suite.Deployments</property>
     </extension>
 
-## Getting SNAPSHOT versions of the plugin
-If you really want to use **snapshots**, here's the repository they are deployed to.
-
-```xml
-<pluginRepositories>
-    <pluginRepository>
-        <id>sonatype-snapshots</id>
-        <name>Sonatype Snapshots</name>
-        <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-    </pluginRepository>
-</pluginRepositories>
-```
-
 ## Generic builder
 
 That project contains generic builder with should work for most simple J2EE cases.
@@ -174,10 +161,8 @@ I just mixed things up..
 
 ## Continuous integration
 
-Travis CI builds the plugin with Oracle and Open JDK 7. All successfully built snapshots are deployed to
-Sonatype OSS repository. Jacoco is used to gather coverage metrics and the report is submitted
-to Coveralls.
-
+Travis CI builds the plugin with Oracle and Open JDK 7.
+Jacoco is used to gather coverage metrics and the report is submitted to Coveralls.
 
 ## License
 
