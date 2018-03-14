@@ -20,18 +20,18 @@ limitations under the License.
 <arquillian xmlns="http://jboss.org/schema/arquillian"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:schemaLocation="http://jboss.org/schema/arquillian http://jboss.org/schema/arquillian/arquillian_1_0.xsd">
-
-    <extension qualifier="suite">
-        <property name="deploymentClass">org.eu.ingwar.tools.arquillian.extension.suite.Deployments</property>
-    </extension>
+    <defaultProtocol type="Servlet 3.0"/>
 
     <engine>
-        <!-- Restaarts managd instance every 200 tests -->
+        <!-- Restarts managd instance every 200 tests -->
         <property name="maxTestClassesBeforeRestart">200</property>
-        <!-- Save deploument to target direstory -->
-        <property name="deploymentExportPath">target/</property>    
+        <property name="deploymentExportPath">target/</property>
     </engine>
-    
+
+    <extension qualifier="suite">
+        <property name="deploymentClass">${test.deploymentClass}</property>
+    </extension>
+
     <!-- standalone configuration -->
     <group qualifier="standalone" default="true">
         <container qualifier="app">
@@ -49,7 +49,4 @@ limitations under the License.
             </configuration>
         </container>
     </group>
-    
-        
-    <defaultProtocol type="Servlet 3.0"/>
 </arquillian>
