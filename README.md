@@ -43,6 +43,8 @@ Mark one of your test classes with annotation @ArquillianSuiteDeployment along w
                 .addPackage(Deployments.class.getPackage());
         }
     }
+    
+**Remember! Always include test classes in your deployment.**
 
 Run test either from IDE or gradle/maven.
 
