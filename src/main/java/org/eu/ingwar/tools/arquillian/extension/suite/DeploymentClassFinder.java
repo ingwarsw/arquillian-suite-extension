@@ -43,7 +43,7 @@ class DeploymentClassFinder {
     static Class<?> getDeploymentClass(ArquillianDescriptor descriptor) {
         Class<?> deploymentClass = getDeploymentClassFromConfig(descriptor);
         if (deploymentClass == null) {
-            deploymentClass = getDeploymentClassFromAnnotation();
+            deploymentClass = getDeploymentClassFromAnnotation(descriptor);
         }
         if (deploymentClass == null) {
             log.warning("arquillian-suite-deployment: Cannot find configuration in arquillian.xml, nor class annotated with @ArquillianSuiteDeployment, will try standard way..");
@@ -53,13 +53,20 @@ class DeploymentClassFinder {
 
     /**
      * Finds class with should produce global deployment PER project.
-     *
+     * 
+     * @param descriptor ArquillianDescriptor
      * @return class marked witch @ArquillianSuiteDeployment annotation
      */
-    private static Class<?> getDeploymentClassFromAnnotation() {
-        // Had a bug that if you open inside eclipse more than one project with @ArquillianSuiteDeployment and is a dependency, the test doesn't run because found more than one @ArquillianSuiteDeployment.
-        // Filter the deployment PER project.
-        final Reflections reflections = new Reflections(ClasspathHelper.contextClassLoader().getResource(""));
+    private static Class<?> getDeploymentClassFromAnnotation(ArquillianDescriptor descriptor) {
+    	final Reflections reflections;
+    	if (isUseFullClassPathFromXml(descriptor)) {
+    		// Clients can opt-in to search on the full classpath. 
+    		reflections = new Reflections(ClasspathHelper.forClassLoader());
+    	} else {
+		    // Had a bug that if you open inside eclipse more than one project with @ArquillianSuiteDeployment and is a dependency, the test doesn't run because found more than one @ArquillianSuiteDeployment.
+		    // Filter the deployment PER project.
+			reflections = new Reflections(ClasspathHelper.contextClassLoader().getResource(""));
+    	}
         Set<Class<?>> results = reflections.getTypesAnnotatedWith(ArquillianSuiteDeployment.class, true);
         if (results.isEmpty()) {
             return null;
@@ -76,6 +83,25 @@ class DeploymentClassFinder {
         final Class<?> type = results.iterator().next();
         log.log(Level.INFO,"arquillian-suite-deployment: Found class annotated with @ArquillianSuiteDeployment: {0}", type.getName());
         return type;
+    }
+    
+    /**
+     * Returns name of class witch should be used as global deployment.
+     * Extension name used: suite
+     * Key: deploymentClass
+     *
+     * @param descriptor ArquillianDescriptor
+     * @return full class name from arquillian.xml
+     */
+    private static boolean isUseFullClassPathFromXml(ArquillianDescriptor descriptor) {
+        ExtensionDef extension = descriptor.extension("suite");
+        if (extension != null) {
+            String fullClasspathScan = extension.getExtensionProperties().get("fullClasspathScan");
+            if (Boolean.valueOf(fullClasspathScan)) {
+            	return true;
+            }
+        }
+        return false;
     }
 
     /**
