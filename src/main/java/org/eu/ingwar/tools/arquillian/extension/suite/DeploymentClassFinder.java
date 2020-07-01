@@ -60,8 +60,14 @@ class DeploymentClassFinder {
     private static Class<?> getDeploymentClassFromAnnotation(ArquillianDescriptor descriptor) {
     	final Reflections reflections;
     	if (shouldScanFullClasspath(descriptor)) {
-    		// Clients can opt-in to search on the full classpath. 
-    		reflections = new Reflections(ClasspathHelper.contextClassLoader());
+    		// Clients can opt-in to search on the full classpath.
+    		// In some setups (such as when running tests through maven surefire plugin)
+    		// the classloader doesn't give access to the full classpath.
+			// When the classpath is loaded though a "booter jar" (which contain the actual
+			// classpath as manifest attribute) we can still access the fully loaded java
+			// classpath dynamically, that we give as second argument here.
+    		// Note that this may not be sufficient in some setups ; this is a best effort.
+    		reflections = new Reflections(ClasspathHelper.contextClassLoader(), ClasspathHelper.forJavaClassPath());
     	} else {
 		    // Had a bug that if you open inside eclipse more than one project with @ArquillianSuiteDeployment and is a dependency, the test doesn't run because found more than one @ArquillianSuiteDeployment.
 		    // Filter the deployment PER project.
