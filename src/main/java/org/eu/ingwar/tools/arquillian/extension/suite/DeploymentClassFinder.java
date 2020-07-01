@@ -59,9 +59,9 @@ class DeploymentClassFinder {
      */
     private static Class<?> getDeploymentClassFromAnnotation(ArquillianDescriptor descriptor) {
     	final Reflections reflections;
-    	if (isUseFullClassPathFromXml(descriptor)) {
+    	if (shouldScanFullClasspath(descriptor)) {
     		// Clients can opt-in to search on the full classpath. 
-    		reflections = new Reflections(ClasspathHelper.forClassLoader());
+    		reflections = new Reflections(ClasspathHelper.contextClassLoader());
     	} else {
 		    // Had a bug that if you open inside eclipse more than one project with @ArquillianSuiteDeployment and is a dependency, the test doesn't run because found more than one @ArquillianSuiteDeployment.
 		    // Filter the deployment PER project.
@@ -86,14 +86,14 @@ class DeploymentClassFinder {
     }
     
     /**
-     * Returns name of class witch should be used as global deployment.
+     * Indicates if the deployment annotated class should be searched across the whole available classpath.
      * Extension name used: suite
-     * Key: deploymentClass
+     * Key: fullClasspathScan
      *
      * @param descriptor ArquillianDescriptor
-     * @return full class name from arquillian.xml
+     * @return flag value from arquillian.xml
      */
-    private static boolean isUseFullClassPathFromXml(ArquillianDescriptor descriptor) {
+    private static boolean shouldScanFullClasspath(ArquillianDescriptor descriptor) {
         ExtensionDef extension = descriptor.extension("suite");
         if (extension != null) {
             String fullClasspathScan = extension.getExtensionProperties().get("fullClasspathScan");
