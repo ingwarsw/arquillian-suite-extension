@@ -43,7 +43,7 @@ class DeploymentClassFinder {
     static Class<?> getDeploymentClass(ArquillianDescriptor descriptor) {
         Class<?> deploymentClass = getDeploymentClassFromConfig(descriptor);
         if (deploymentClass == null) {
-            deploymentClass = getDeploymentClassFromAnnotation();
+            deploymentClass = getDeploymentClassFromAnnotation(descriptor);
         }
         if (deploymentClass == null) {
             log.warning("arquillian-suite-deployment: Cannot find configuration in arquillian.xml, nor class annotated with @ArquillianSuiteDeployment, will try standard way..");
@@ -53,13 +53,26 @@ class DeploymentClassFinder {
 
     /**
      * Finds class with should produce global deployment PER project.
-     *
+     * 
+     * @param descriptor ArquillianDescriptor
      * @return class marked witch @ArquillianSuiteDeployment annotation
      */
-    private static Class<?> getDeploymentClassFromAnnotation() {
-        // Had a bug that if you open inside eclipse more than one project with @ArquillianSuiteDeployment and is a dependency, the test doesn't run because found more than one @ArquillianSuiteDeployment.
-        // Filter the deployment PER project.
-        final Reflections reflections = new Reflections(ClasspathHelper.contextClassLoader().getResource(""));
+    private static Class<?> getDeploymentClassFromAnnotation(ArquillianDescriptor descriptor) {
+    	final Reflections reflections;
+    	if (shouldScanFullClasspath(descriptor)) {
+    		// Clients can opt-in to search on the full classpath.
+    		// In some setups (such as when running tests through maven surefire plugin)
+    		// the classloader doesn't give access to the full classpath.
+			// When the classpath is loaded though a "booter jar" (which contain the actual
+			// classpath as manifest attribute) we can still access the fully loaded java
+			// classpath dynamically, that we give as second argument here.
+    		// Note that this may not be sufficient in some setups ; this is a best effort.
+    		reflections = new Reflections(ClasspathHelper.contextClassLoader(), ClasspathHelper.forJavaClassPath());
+    	} else {
+		    // Had a bug that if you open inside eclipse more than one project with @ArquillianSuiteDeployment and is a dependency, the test doesn't run because found more than one @ArquillianSuiteDeployment.
+		    // Filter the deployment PER project.
+			reflections = new Reflections(ClasspathHelper.contextClassLoader().getResource(""));
+    	}
         Set<Class<?>> results = reflections.getTypesAnnotatedWith(ArquillianSuiteDeployment.class, true);
         if (results.isEmpty()) {
             return null;
@@ -76,6 +89,25 @@ class DeploymentClassFinder {
         final Class<?> type = results.iterator().next();
         log.log(Level.INFO,"arquillian-suite-deployment: Found class annotated with @ArquillianSuiteDeployment: {0}", type.getName());
         return type;
+    }
+    
+    /**
+     * Indicates if the deployment annotated class should be searched across the whole available classpath.
+     * Extension name used: suite
+     * Key: fullClasspathScan
+     *
+     * @param descriptor ArquillianDescriptor
+     * @return flag value from arquillian.xml
+     */
+    private static boolean shouldScanFullClasspath(ArquillianDescriptor descriptor) {
+        ExtensionDef extension = descriptor.extension("suite");
+        if (extension != null) {
+            String fullClasspathScan = extension.getExtensionProperties().get("fullClasspathScan");
+            if (Boolean.valueOf(fullClasspathScan)) {
+            	return true;
+            }
+        }
+        return false;
     }
 
     /**
