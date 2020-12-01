@@ -5,6 +5,7 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+  tags:
 
 env:
   DEPLOY_USERNAME: ingwarsw
@@ -12,12 +13,18 @@ env:
     
 jobs:
   build:
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 8
+      - name: Build with Maven
+        run: mvn test --batch-mode -T4 -DskipTests=true
 
-    runs-on: ${{ matrix.os }}
-
+  test:
     strategy:
       matrix:
-        os: [ubuntu-latest]
         profile: 
           - test-wildfly-managed,coveralls-coverage
           - test-wildfly-managed-domain
@@ -25,21 +32,11 @@ jobs:
 #          - test-jboss-managed
 #          - test-glassfish-embeded
     
-    env:
-      PROFILE:
-        ${{ matrix.profile }}
-    
     steps:
       - uses: actions/checkout@v2
-        with:
-          submodules: true
       - name: Set up JDK 1.8
-#        uses: renatoathaydes/setup-java-sdkman@2.1.1
         uses: actions/setup-java@v1
         with:
           java-version: 8
-#          java-version: 8.0.272-zulu
-      - name: Build with Maven
-        run: travis/travis.py --fetch
       - name: Test with Maven
-        run: travis/travis.py --test
+        run: mvn test --batch-mode -T4 -P${{ matrix.profile }} 
