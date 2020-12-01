@@ -4,7 +4,7 @@
 
     <groupId>org.eu.ingwar.tools</groupId>
     <artifactId>arquillian-suite-extension</artifactId>
-    <version>1.2.2-SNAPSHOT</version>
+    <version>1.2.2</version>
     <packaging>jar</packaging>
 
 
@@ -25,7 +25,7 @@
         <connection>scm:git:https://github.com/ingwarsw/arquillian-suite-extension.git</connection>
         <developerConnection>scm:git:https://github.com/ingwarsw/arquillian-suite-extension.git</developerConnection>
         <url>https://github.com/ingwarsw/arquillian-suite-extension</url>
-        <tag>HEAD</tag>
+        <tag>v1.2.2</tag>
     </scm>
 
     <organization>
