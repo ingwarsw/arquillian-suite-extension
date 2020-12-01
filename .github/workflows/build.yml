@@ -22,8 +22,8 @@ jobs:
           - test-wildfly-managed,coveralls-coverage
           - test-wildfly-managed-domain
           - test-jboss-managed-domain
-          - test-jboss-managed
-          - test-glassfish-embeded
+#          - test-jboss-managed
+#          - test-glassfish-embeded
     
     env:
       PROFILE:
