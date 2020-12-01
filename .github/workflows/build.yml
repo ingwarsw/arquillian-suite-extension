@@ -34,7 +34,7 @@ jobs:
         with:
           submodules: true
       - name: Set up JDK 1.8
-        uses: renatoathaydes/setup-java-sdkman@v2.x
+        uses: renatoathaydes/setup-java-sdkman@v2.1.1
         with:
           java-version: 8.0.265-zulu
       - name: Build with Maven
