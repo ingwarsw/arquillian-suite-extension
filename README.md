@@ -2,7 +2,7 @@ The Arquillian Suite Extension
 ==================================
 
 [![Build Status](https://github.com/ingwarsw/arquillian-suite-extension/workflows/CI/badge.svg)](https://github.com/ingwarsw/arquillian-suite-extension/actions?query=workflow%3ACI)
-[![Coverage Status](https://coveralls.io/repos/ingwarsw/arquillian-suite-extension/badge.png?branch=master)](https://coveralls.io/r/ingwarsw/arquillian-suite-extension?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/ingwarsw/arquillian-suite-extension/badge.svg?branch=master)](https://coveralls.io/github/ingwarsw/arquillian-suite-extension?branch=master)
 [![Maven Central](https://img.shields.io/maven-central/v/org.eu.ingwar.tools/arquillian-suite-extension.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.eu.ingwar.tools%22%20AND%20a%3A%22arquillian-suite-extension%22)
 
 The Extension will force all Classes in a Module into a TestSuite running from the same DeploymentScenario.
