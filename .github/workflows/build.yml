@@ -17,7 +17,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-latest, windows-latest, ubuntu-latest]
+        os: [ubuntu-latest]
         profile: 
           - test-wildfly-managed,coveralls-coverage
           - test-wildfly-managed-domain
