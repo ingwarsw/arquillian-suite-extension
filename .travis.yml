@@ -22,14 +22,10 @@ matrix:
         - env: "PROFILE=test-jboss-managed"
         - env: "PROFILE=test-glassfish-embeded"
 
-install: travis/travis.py --fetch
-
-script: travis/travis.py --test
-
 deploy:
-  - provider: script
-    skip_cleanup: true
-    script: travis/travis.py --deploy
+  - provider: bintray
+    user: ingwarsw
+    edge: true
     on:
       tags: true
       condition: "$PROFILE = test-wildfly-managed,coveralls-coverage"
