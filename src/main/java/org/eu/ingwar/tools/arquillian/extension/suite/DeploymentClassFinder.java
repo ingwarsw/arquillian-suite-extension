@@ -20,7 +20,6 @@ package org.eu.ingwar.tools.arquillian.extension.suite;
  * #L%
  */
 
-import org.apache.commons.lang.StringUtils;
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuiteDeployment;
 import org.jboss.arquillian.config.descriptor.api.ArquillianDescriptor;
 import org.jboss.arquillian.config.descriptor.api.ExtensionDef;
@@ -30,6 +29,7 @@ import org.reflections.util.ClasspathHelper;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.lang3.StringUtils;
 
 class DeploymentClassFinder {
     private static final Logger log = Logger.getLogger(DeploymentClassFinder.class.getName());
@@ -53,7 +53,7 @@ class DeploymentClassFinder {
 
     /**
      * Finds class with should produce global deployment PER project.
-     * 
+     *
      * @param descriptor ArquillianDescriptor
      * @return class marked witch @ArquillianSuiteDeployment annotation
      */
@@ -90,7 +90,7 @@ class DeploymentClassFinder {
         log.log(Level.INFO,"arquillian-suite-deployment: Found class annotated with @ArquillianSuiteDeployment: {0}", type.getName());
         return type;
     }
-    
+
     /**
      * Indicates if the deployment annotated class should be searched across the whole available classpath.
      * Extension name used: suite

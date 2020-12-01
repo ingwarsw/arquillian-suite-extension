@@ -6,12 +6,12 @@
     <artifactId>arquillian-suite-extension</artifactId>
     <version>1.2.2-SNAPSHOT</version>
     <packaging>jar</packaging>
-    
-    
+
+
     <name>Arquillian suite extension</name>
     <description>Arquillian extension that will force single deployment for all tests</description>
     <url>https://github.com/ingwarsw/arquillian-suite-extension</url>
-    
+
     <inceptionYear>2013</inceptionYear>
 
     <licenses>
@@ -60,12 +60,12 @@
         <maven.compiler.source>1.6</maven.compiler.source>
 
         <!-- Libraries versions -->
-        <version.arquillian_core>1.4.0.Final</version.arquillian_core>
-        <version.jacoco>0.7.4.201502262128</version.jacoco>
+        <version.arquillian_core>1.6.0.Final</version.arquillian_core>
+        <version.jacoco>0.8.6</version.jacoco>
         <version.jbossas>7.5.7.Final-redhat-3</version.jbossas>
         <version.glassfish>4.1.2</version.glassfish>
         <version.wildfly>10.1.0.Final</version.wildfly>
-        <version.arquillian_wildfly>2.1.0.Final</version.arquillian_wildfly>
+        <version.arquillian_wildfly>3.0.1.Final</version.arquillian_wildfly>
 
         <!-- Other props -->
         <jbossHome>${project.build.directory}/jboss-as-${version.jbossas}</jbossHome>
@@ -83,11 +83,6 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>24.1.1-jre</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -96,33 +91,44 @@
         <dependency>
             <groupId>org.jboss.arquillian.container</groupId>
             <artifactId>arquillian-container-test-impl-base</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
             <groupId>org.jboss.arquillian.core</groupId>
             <artifactId>arquillian-core-impl-base</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
             <groupId>org.jboss.shrinkwrap.resolver</groupId>
             <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
             <groupId>org.jboss.shrinkwrap.resolver</groupId>
             <artifactId>shrinkwrap-resolver-impl-maven-archive</artifactId>
+            <optional>true</optional>
             <type>jar</type>
         </dependency>
 
         <dependency>
             <groupId>org.jboss.shrinkwrap</groupId>
             <artifactId>shrinkwrap-impl-base</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
             <version>0.9.11</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -136,12 +142,14 @@
         <dependency>
             <groupId>org.jboss.arquillian.protocol</groupId>
             <artifactId>arquillian-protocol-servlet</artifactId>
+            <optional>true</optional>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.jboss.arquillian.junit</groupId>
             <artifactId>arquillian-junit-container</artifactId>
+            <optional>true</optional>
             <scope>test</scope>
         </dependency>
 
@@ -149,7 +157,19 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.13.1</version>
+            <optional>true</optional>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>30.0-jre</version>
         </dependency>
     </dependencies>
 
@@ -166,7 +186,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-dependency-plugin</artifactId>
-                    <version>3.0.1</version>
+                    <version>3.1.2</version>
                     <executions>
                         <execution>
                             <id>unpack</id>
@@ -196,12 +216,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.2</version>
+                <version>3.8.1</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.19.1</version>
+                <version>3.0.0-M5</version>
                 <configuration>
                     <environmentVariables>
                         <JBOSS_HOME>${jbossHome}</JBOSS_HOME>
@@ -236,7 +256,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>3.3.1</version>
                 <configuration>
                     <webappDirectory>${project.build.directory}/test-war-module</webappDirectory>
                 </configuration>
@@ -247,6 +267,26 @@
                             <goal>exploded</goal>
                         </goals>
                         <phase>test-compile</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.0.0-M3</version>
+                <executions>
+                    <execution>
+                        <id>enforce-maven</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>3.6</version>
+                                </requireMavenVersion>
+                            </rules>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -267,7 +307,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.0.0-M1</version>
+                        <version>3.2.0</version>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
@@ -280,7 +320,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>3.0.1</version>
+                        <version>3.2.1</version>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
@@ -512,7 +552,7 @@
                     <plugin>
                         <groupId>org.eluder.coveralls</groupId>
                         <artifactId>coveralls-maven-plugin</artifactId>
-                        <version>3.2.1</version>
+                        <version>4.3.0</version>
                         <executions>
                             <execution>
                                 <id>coveralls-jacoco</id>
