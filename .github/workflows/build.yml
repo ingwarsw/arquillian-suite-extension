@@ -36,7 +36,7 @@ jobs:
       - name: Set up JDK 1.8
         uses: renatoathaydes/setup-java-sdkman@2.1.1
         with:
-          java-version: 8.0.265-zulu
+          java-version: 8.0.272-zulu
       - name: Build with Maven
         run: travis/travis.py --fetch
       - name: Test with Maven
