@@ -27,7 +27,7 @@ jobs:
         with:
           java-version: 8
       - name: Build
-        run: mvn test --batch-mode -T4 -DskipTests=true
+        run: mvn install --batch-mode -T4 -DskipTests=true
       - name: Test
         run: mvn test --batch-mode -T4 -P${{ matrix.profile }}
   
@@ -37,6 +37,10 @@ jobs:
       matrix:
         suite:
           - junit5
+    
+    env:
+      
+
 
     steps:
       - uses: actions/checkout@v2
@@ -44,14 +48,12 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 8
-      - name: ls 1
-        run: ls -alh .
-      - name: ls 2
-        run: ls -alh ./test-suites
-      - name: ls 3
-        run: ls -alh ./test-suites/${{ matrix.suite }}
+      - name: Set env
+        run: echo "AS_VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_ENV
+      - name: Build
+        run: mvn install --batch-mode -T4 -DskipTests=true
       - name: Run test suite
-        run: mvn test --batch-mode
+        run: mvn test --batch-mode -Dversion.arquillian_suite=${{ env.AS_VERSION }}
         working-directory: ./test-suites/${{ matrix.suite }}
 
   publish:
