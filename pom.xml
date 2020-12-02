@@ -297,11 +297,6 @@
         <!-- Profile for generating sources and javadocs -->
         <profile>
             <id>generate-sources-and-javadocs</id>
-            <activation>
-                <property>
-                    <name>env.TRAVIS</name>
-                </property>
-            </activation>
             <build>
                 <plugins>
                     <plugin>
