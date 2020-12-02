@@ -47,9 +47,9 @@ jobs:
       - name: Build
         run: mvn install --batch-mode -T4 -DskipTests=true
       - name: Set env
-        run: echo "AS_VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_ENV
+        run: echo "PROJECT_VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_ENV
       - name: Run test suite
-        run: mvn test --batch-mode -Dversion.arquillian_suite=${{ env.AS_VERSION }}
+        run: mvn test --batch-mode -Dversion.arquillian_suite=${{ env.PROJECT_VERSION }}
         working-directory: ./test-suites/${{ matrix.suite }}
 
   publish:
@@ -65,8 +65,17 @@ jobs:
           server-id: bintray-ingwarsw-org.eu.ingwar.tools
           server-username: BINTRAY_USERNAME
           server-password: BINTRAY_API_KEY
-      - name: Publish to Apache Maven Central
+      - name: Publish to Bintray 
         run: mvn deploy --batch-mode
         env:
           BINTRAY_USERNAME: ingwarsw
           BINTRAY_API_KEY: ${{ secrets.BINTRAY_API_KEY }}
+      - name: Set env
+        run: echo "PROJECT_VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_ENV
+      - name: Sync to Maven Central
+        uses: simontunnat/action-bintray-maven-central-sync@v1.1
+        with:
+          username: ingwarsw
+          password: ${{ secrets.BINTRAY_API_KEY }}
+          package: org.eu.ingwar.tools:arquillian-suite-extension
+          version: ${{ env.PROJECT_VERSION }}
