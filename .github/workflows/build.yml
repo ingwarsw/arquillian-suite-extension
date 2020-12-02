@@ -49,10 +49,10 @@ jobs:
       - name: ls 2
         run: ls -alh ./test-suites
       - name: ls 3
-        run: ls -alh ./test-suites/{{ matrix.suite }}
+        run: ls -alh ./test-suites/${{ matrix.suite }}
       - name: Run test suite
         run: mvn test --batch-mode
-        working-directory: ./test-suites/{{ matrix.suite }}
+        working-directory: ./test-suites/${{ matrix.suite }}
 
   publish:
     runs-on: ubuntu-latest
