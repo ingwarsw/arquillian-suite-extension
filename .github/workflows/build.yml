@@ -44,6 +44,12 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 8
+      - name: ls 1
+        run: ls -alh .
+      - name: ls 2
+        run: ls -alh ./test-suites
+      - name: ls 3
+        run: ls -alh ./test-suites/{{ matrix.suite }}
       - name: Run test suite
         run: mvn test --batch-mode
         working-directory: ./test-suites/{{ matrix.suite }}
