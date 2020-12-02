@@ -44,10 +44,10 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 8
-      - name: Set env
-        run: echo "AS_VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_ENV
       - name: Build
         run: mvn install --batch-mode -T4 -DskipTests=true
+      - name: Set env
+        run: echo "AS_VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_ENV
       - name: Run test suite
         run: mvn test --batch-mode -Dversion.arquillian_suite=${{ env.AS_VERSION }}
         working-directory: ./test-suites/${{ matrix.suite }}
