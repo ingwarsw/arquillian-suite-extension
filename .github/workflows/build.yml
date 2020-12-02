@@ -38,10 +38,6 @@ jobs:
         suite:
           - junit5
     
-    env:
-      
-
-
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 1.8
