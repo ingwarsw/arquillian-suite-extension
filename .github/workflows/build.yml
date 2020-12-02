@@ -66,7 +66,7 @@ jobs:
           server-username: BINTRAY_USERNAME
           server-password: BINTRAY_API_KEY
       - name: Publish to Bintray 
-        run: mvn deploy --batch-mode
+        run: mvn deploy --batch-mode -DskipTests=true
         env:
           BINTRAY_USERNAME: ingwarsw
           BINTRAY_API_KEY: ${{ secrets.BINTRAY_API_KEY }}
