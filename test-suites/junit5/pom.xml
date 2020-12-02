@@ -166,7 +166,7 @@
             <dependency>
                 <groupId>org.jboss.arquillian</groupId>
                 <artifactId>arquillian-bom</artifactId>
-                <version>1.7.0.Final-SNAPSHOT</version>
+                <version>1.7.0.Alpha6-payara</version>
                 <type>pom</type>
                 <scope>test</scope>
             </dependency>
