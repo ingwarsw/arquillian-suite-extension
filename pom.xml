@@ -45,7 +45,7 @@
         <repository>
             <id>bintray-ingwarsw-org.eu.ingwar.tools</id>
             <name>ingwarsw-org.eu.ingwar.tools</name>
-            <url>https://api.bintray.com/maven/ingwarsw/org.eu.ingwar.tools/arquillian-suite-extension/;publish=0</url>
+            <url>https://api.bintray.com/maven/ingwarsw/org.eu.ingwar.tools/arquillian-suite-extension/;publish=1</url>
         </repository>
     </distributionManagement>
 
