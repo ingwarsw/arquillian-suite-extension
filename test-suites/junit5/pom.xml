@@ -58,7 +58,6 @@
         <dependency>
             <groupId>org.jboss.arquillian.junit5</groupId>
             <artifactId>arquillian-junit5-container</artifactId>
-            <version>1.7.0.Alpha6</version>
             <scope>test</scope>
         </dependency>
 
@@ -66,7 +65,7 @@
         <dependency>
             <groupId>fish.payara.arquillian</groupId>
             <artifactId>arquillian-payara-server-remote</artifactId>
-            <version>2.3.1.1-arq-1.7.0.Alpha5</version>
+            <version>2.3.1</version>
             <scope>test</scope>
         </dependency>
 
