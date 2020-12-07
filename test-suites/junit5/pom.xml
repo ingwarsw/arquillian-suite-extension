@@ -58,7 +58,7 @@
         <dependency>
             <groupId>org.jboss.arquillian.junit5</groupId>
             <artifactId>arquillian-junit5-container</artifactId>
-            <version>1.7.0.Alpha6-payara</version>
+            <version>1.7.0.Alpha6</version>
             <scope>test</scope>
         </dependency>
 
@@ -166,7 +166,7 @@
             <dependency>
                 <groupId>org.jboss.arquillian</groupId>
                 <artifactId>arquillian-bom</artifactId>
-                <version>1.7.0.Alpha6-payara</version>
+                <version>1.7.0.Alpha6</version>
                 <type>pom</type>
                 <scope>test</scope>
             </dependency>
@@ -188,12 +188,4 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-    <repositories>
-        <!-- Payara JUnit 5 support is only available in this repository for now (Alpha) -->
-        <repository>
-            <id>payara</id>
-            <url>https://nexus.payara.fish/repository/payara-artifacts</url>
-        </repository>
-    </repositories>
 </project>
