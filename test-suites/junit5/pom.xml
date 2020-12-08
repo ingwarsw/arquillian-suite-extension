@@ -58,7 +58,6 @@
         <dependency>
             <groupId>org.jboss.arquillian.junit5</groupId>
             <artifactId>arquillian-junit5-container</artifactId>
-            <version>1.7.0.Alpha6-payara</version>
             <scope>test</scope>
         </dependency>
 
@@ -166,9 +165,9 @@
             <dependency>
                 <groupId>org.jboss.arquillian</groupId>
                 <artifactId>arquillian-bom</artifactId>
-                <version>1.7.0.Alpha6-payara</version>
+                <version>1.7.0.Alpha6</version>
                 <type>pom</type>
-                <scope>test</scope>
+                <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>org.jboss.shrinkwrap.resolver</groupId>
